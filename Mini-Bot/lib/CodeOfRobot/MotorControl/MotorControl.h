@@ -1,12 +1,15 @@
+#include "Arduino.h"
+#include "analogWrite.h"
 class MotorControl
 {
-private:
     public:
-    static void setup();
-    static void loop();
+        static void setup();
+        static void loop();
+        static void setLeftMotorf(int speed);
+        static void setRightMotorf(int speed);
+        static void setLeftMotorb(int speed);
+        static void setRightMotorb(int speed);
+    private:
     
-public:
-    static void setLeftMotor(int speed);
-    static void setRightMotor(int speed);
 };
 
