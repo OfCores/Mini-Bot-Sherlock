@@ -16,8 +16,7 @@ public:
     static void setup();
     static void loop();
     static short getSpeed();
-    static short getTurnLeft();
-    static short getTurnRight();
+    static short getTurn();
 
 };
 

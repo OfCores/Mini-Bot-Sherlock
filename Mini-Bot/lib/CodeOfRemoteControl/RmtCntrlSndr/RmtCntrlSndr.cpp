@@ -11,12 +11,12 @@ typedef struct RemoteControl::struct_message {
 struct_message myData;
 
 // callback when data is sent
-void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+void RemoteControl::OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   if(status != ESP_NOW_SEND_SUCCESS) 
     Serial.println("ESP-NOW: Delivery failed");
 }
  
-void setup() {
+void RemoteControl::setup() {
   WiFi.mode(WIFI_STA);
 
   if (esp_now_init() != ESP_OK) {
@@ -48,7 +48,7 @@ void RemoteControl::sendData(short speed, short turnLeft, short turnRight) {
   myData.turnRight = turnRight;
   myData.turnLeft = turnLeft;
   Serial.println();
-  Serial.print("Speed "); Serial.print(speed);
+  Serial.print("Speed "); Serial.println(speed);
 
   esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
    

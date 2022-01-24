@@ -7,8 +7,7 @@
 // Must match the sender structure
 typedef struct struct_message {
     short speed;
-    short turnLeft;
-    short turnRight;
+    short turn;
 } struct_message;
 
 struct_message myData;
@@ -35,9 +34,6 @@ void RemoteControl::loop() {}
 short RemoteControl::getSpeed() {
     return myData.speed;
 }
-short RemoteControl::getTurnLeft() {
-    return myData.turnLeft;
-}
-short RemoteControl::getTurnRight() {
-    return myData.turnRight;
+short RemoteControl::getTurn() {
+    return myData.turn;
 }
