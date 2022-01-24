@@ -11,8 +11,8 @@ private:
 
 public:
     static void optoSetup();
-    boolean isSensorOnLine(BWSensor sensor); //returns value of selected Sensor (Sensor names saved in Enum) if on line return true if! return false 
-    boolean calibrate(Accuracy accuracy= Accuracy.Low); //Put Sherlock on a track and call function. Sherlock will auto kalibrate itself through turning left or right; return true if cali succesful; Accuracy intervens duration of calibration
+    bool isSensorOnLine(BWSensor sensor); //returns value of selected Sensor (Sensor names saved in Enum) if on line return true if! return false 
+    bool calibrate(Accuracy accuracy= Accuracy.Low); //Put Sherlock on a track and call function. Sherlock will auto kalibrate itself through turning left or right; return true if cali succesful; Accuracy intervens duration of calibration
 
 };
 
