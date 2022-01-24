@@ -1,3 +1,3 @@
 #include <Arduino.h>
 
-enum Accuracy {VeryLow,Low,Medium,High,VeryHigh}
+enum Accuracy {VeryLow,Low,Medium,High,VeryHigh};

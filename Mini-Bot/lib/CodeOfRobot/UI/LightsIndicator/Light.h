@@ -1,0 +1,1 @@
+//one or multiple LEDs to indicate curent statuses of Sherlock (e.g. standby, connecting to Remote,...)
