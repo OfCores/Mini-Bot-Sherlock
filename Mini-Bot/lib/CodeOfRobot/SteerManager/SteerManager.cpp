@@ -37,7 +37,7 @@ void SteerManager::loop() {
             } 
         }
 
-        if(!sL && sM && sR) { //Der Rechte Optokoppler ist schwarz
+        if(!sL && sM && sR) { //Der linke Optokoppler ist schwarz
             MotorControl::driveLeft(100);
             MotorControl::driveRight(TURN_RADICAL);
         }
