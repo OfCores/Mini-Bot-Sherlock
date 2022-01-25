@@ -1,0 +1,1 @@
+//lib for voice/sound output of Sherlock. Made to give Sherlock an unique spirit

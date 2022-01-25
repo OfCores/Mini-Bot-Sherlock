@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define IS_REMOTE_CONTROL false
+#define IS_REMOTE_CONTROL true
 
 #if(IS_REMOTE_CONTROL) 
 #include <../lib/CodeOfRemoteControl/Manager/Manager.h>
@@ -9,6 +9,8 @@
 #endif
 
 void setup() {
+    Serial.begin(9600);
+    Serial.println("Started");
     Manager::setup();
 }
 
