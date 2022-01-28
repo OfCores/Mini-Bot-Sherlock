@@ -1,11 +1,10 @@
-#ifndef Manager_h
-#define Manager_h
+#ifndef ManagerRobot_h
+#define ManagerRobot_h
 
-#include "../Util/Util.h"
-#include "../RemoteControl/RemoteControl.h"
+#include "../RemoteControlRobot/RemoteControlRobot.h"
 #include "../SteerManager/SteerManager.h"
 
-class Manager
+class ManagerRobot
 {
 private:
     
@@ -13,7 +12,6 @@ public:
     static void setup();
     static void loop();
     static void loop2(void* parm);
-
 };
 
 #endif
