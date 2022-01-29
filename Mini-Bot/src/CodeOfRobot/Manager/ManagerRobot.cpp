@@ -1,23 +1,21 @@
-#include "Manager.h"
-
-#define IS_REMOTE_CONTROL false
+#include "ManagerRobot.h"
 
 #define STEERING_LOOP_LENGTH 250
 
-void Manager::setup() {
+void ManagerRobot::setup() {
   SteerManager::setup();
   xTaskCreate(loop2, "Loop2", 2048, NULL, 0, NULL);
 }
 
-void Manager::loop() {
+void ManagerRobot::loop() {
   SteerManager::loop();
   vTaskDelay(STEERING_LOOP_LENGTH/portTICK_PERIOD_MS);
 }
 
-void Manager::loop2(void* parm) {
-  RemoteControl::setup();  
+void ManagerRobot::loop2(void* parm) {
+  RemoteControlRobot::setup();  
   for(;;) {
-    RemoteControl::loop();
+    RemoteControlRobot::loop();
     vTaskDelay(1000/portTICK_PERIOD_MS);
   }
 }

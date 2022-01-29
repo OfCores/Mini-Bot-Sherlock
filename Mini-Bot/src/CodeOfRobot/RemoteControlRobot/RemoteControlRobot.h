@@ -3,21 +3,20 @@
 
 #include "../Util/Util.h"
 
-class RemoteControl
+class RemoteControlRobot
 {
 private:
-    typedef struct struct_message;
+    struct struct_message;
 
     static void RemoteSetup();
     static void RemoteLoop();
-    static void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len);
+    static void OnDataRecvRobot(const uint8_t * mac, const uint8_t *incomingData, int len);
 
 public:
     static void setup();
     static void loop();
     static short getSpeed();
     static short getTurn();
-
 };
 
 #endif

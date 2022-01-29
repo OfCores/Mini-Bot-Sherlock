@@ -14,7 +14,7 @@ private:
 public:
     static void setup();
     static void loop();
-    static void sendData(short speed, short turnLeft, short turnRight);
+    static void sendData(short speed, short turn);
 };
 
 #endif

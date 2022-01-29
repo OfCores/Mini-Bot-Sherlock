@@ -4,8 +4,7 @@ uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 typedef struct RemoteControl::struct_message {
     short speed;
-    short turnLeft;
-    short turnRight;
+    short turn;
 } struct_message;
 
 struct_message myData;
@@ -43,10 +42,9 @@ void RemoteControl::loop() {
   
 }
 
-void RemoteControl::sendData(short speed, short turnLeft, short turnRight) {
+void RemoteControl::sendData(short speed, short turn) {
   myData.speed = speed;
-  myData.turnRight = turnRight;
-  myData.turnLeft = turnLeft;
+  myData.turn = turn;
   Serial.println();
   Serial.print("Speed "); Serial.println(speed);
 

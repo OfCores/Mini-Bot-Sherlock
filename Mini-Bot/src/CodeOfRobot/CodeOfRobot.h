@@ -1,0 +1,1 @@
+#include "../CodeOfRobot/Manager/ManagerRobot.h"

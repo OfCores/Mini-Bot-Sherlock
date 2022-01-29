@@ -1,19 +1,16 @@
 #include <Arduino.h>
 
-#define IS_REMOTE_CONTROL true
 
-#if(IS_REMOTE_CONTROL) 
-#include <../lib/CodeOfRemoteControl/Manager/Manager.h>
-#else
-#include <../lib/CodeOfRobot/Manager/Manager.h>
-#endif
+//#include <../lib/CodeOfRemoteControl/Manager/Manager.h>
+
+#include "CodeOfRobot/CodeOfRobot.h"
 
 void setup() {
     Serial.begin(9600);
     Serial.println("Started");
-    Manager::setup();
+    ManagerRobot::setup();
 }
 
 void loop() {
-    Manager::loop();
+    ManagerRobot::loop();
 }

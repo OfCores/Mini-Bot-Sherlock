@@ -8,14 +8,20 @@ boolean sR = true;
 #define TURN_MEDIUM 80
 #define TURN_RADICAL 30
 
+short SteerManager::speed;
+short SteerManager::turn;
+short SteerManager::lastTurn;
+boolean SteerManager::automaticMode;
+short SteerManager::lastState;
+
 void SteerManager::setup() {
     
 }
 
 void SteerManager::loop() {
     lastTurn = turn;
-    turn = RemoteControl::getTurn();
-    speed = RemoteControl::getSpeed();
+    turn = RemoteControlRobot::getTurn();
+    speed = RemoteControlRobot::getSpeed();
 
     if(automaticMode == true) {
         if(speed <= 0) return;
@@ -36,14 +42,19 @@ void SteerManager::loop() {
                 MotorControl::driveRight(5);
             } 
         }
+        short _turn;
+        if(sM)
+            _turn = TURN_MEDIUM;
+        else
+            _turn = TURN_RADICAL;
 
-        if(!sL && sM && sR) { //Der linke Optokoppler ist schwarz
+        if(sL && !sR) { //Der rechte Optokoppler ist schwarz -> fährt nach rechts
             MotorControl::driveLeft(100);
-            MotorControl::driveRight(TURN_RADICAL);
+            MotorControl::driveRight(_turn);
         }
-        if(sL && sM && !sR) { //Der Rechte Optokoppler ist schwarz
+        if(!sL&& sR) { //Der linke Optokoppler ist schwarz -> fährt nach links
             MotorControl::driveRight(100);
-            MotorControl::driveLeft(TURN_RADICAL);
+            MotorControl::driveLeft(_turn);
         }
 
 
