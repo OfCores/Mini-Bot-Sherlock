@@ -7,8 +7,11 @@
 class Manager
 {
 private:
-    /* data */
+    static void manageButton();
+    static int getJoyStickTurn();
+    static int getJoyStickSpeed();
 public:
+    static boolean automaticMode;
     static void setup();
     static void loop();
     static int getSpeed();

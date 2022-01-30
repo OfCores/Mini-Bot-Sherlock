@@ -11,7 +11,7 @@ private:
 public:
     static void setup();
     static void loop();
-    static void loop2(void* parm);
+    // static void loop2(void* parm);
 };
 
 #endif

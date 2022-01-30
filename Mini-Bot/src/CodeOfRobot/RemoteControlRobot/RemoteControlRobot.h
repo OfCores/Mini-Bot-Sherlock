@@ -17,6 +17,7 @@ public:
     static void loop();
     static short getSpeed();
     static short getTurn();
+    static boolean getAutomaticMode();
 };
 
 #endif

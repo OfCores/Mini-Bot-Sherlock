@@ -1,10 +1,12 @@
 #include "RmtCntrlSndr.h"
 
+// uint8_t broadcastAddress[] = {0x3C, 0x61, 0x05, 0x3E, 0x1F, 0x90};
 uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 typedef struct RemoteControl::struct_message {
     short speed;
     short turn;
+    boolean automaticMode;
 } struct_message;
 
 struct_message myData;
@@ -21,6 +23,8 @@ void RemoteControl::setup() {
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
+  } else {
+    Serial.println("Initializing ESP-NOW succesfully");
   }
 
   esp_now_register_send_cb(OnDataSent);
@@ -34,7 +38,7 @@ void RemoteControl::setup() {
   // Add peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
     Serial.println("Failed to add peer");
-    return;
+    delay(99*99*99*99);
   }
 }
  
@@ -42,9 +46,10 @@ void RemoteControl::loop() {
   
 }
 
-void RemoteControl::sendData(short speed, short turn) {
+void RemoteControl::sendData(short speed, short turn, boolean automaticMode) {
   myData.speed = speed;
   myData.turn = turn;
+  myData.automaticMode = automaticMode;
   Serial.println();
   Serial.print("Speed "); Serial.println(speed);
 
@@ -52,5 +57,7 @@ void RemoteControl::sendData(short speed, short turn) {
    
   if (result != ESP_OK) {
     Serial.println("ESP-NOW: Error sending the data");
+  } else {
+    // Serial.print("*");
   }
 }

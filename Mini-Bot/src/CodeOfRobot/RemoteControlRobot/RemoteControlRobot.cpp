@@ -8,14 +8,21 @@
 typedef struct struct_message {
     short speed;
     short turn;
+    boolean automaticMode;
 } struct_message;
 
 struct_message myDataRobot;
 
-// callback function that will be executed when data is received
+// Funktion die ausgeführt wird wenn die Fernbedienung Werte schickt
 void RemoteControlRobot::OnDataRecvRobot(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&myDataRobot, incomingData, sizeof(myDataRobot));
-  
+  Serial.print("DATA RECEIVED: Speed -> ");
+  Serial.print(myDataRobot.speed);
+  Serial.print("; Turn -> ");
+  Serial.print(myDataRobot.turn);
+  Serial.print("; Modus -> ");
+  Serial.print(myDataRobot.automaticMode);
+  Serial.println(";");
 }
  
 void RemoteControlRobot::setup() {
@@ -25,7 +32,13 @@ void RemoteControlRobot::setup() {
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
+  } else {
+    Serial.println("Initializing ESP-NOW succesfully");
   }
+
+  //Output der Mac-Adresse (Nötig zur Verbindung zum 2. ESP)
+  Serial.println(WiFi.macAddress());
+
   esp_now_register_recv_cb(OnDataRecvRobot);
 }
  
@@ -36,4 +49,7 @@ short RemoteControlRobot::getSpeed() {
 }
 short RemoteControlRobot::getTurn() {
     return myDataRobot.turn;
+}
+boolean RemoteControlRobot::getAutomaticMode() {
+    return myDataRobot.automaticMode;
 }
