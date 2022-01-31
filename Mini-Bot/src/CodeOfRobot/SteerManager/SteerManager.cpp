@@ -1,5 +1,9 @@
 #include "SteerManager.h"
-#include "../SensorRead/SensorRead.h"
+#include "../sensors/BWSensor.h"
+
+BWSensor SteerManager::BWLeft = BWSensor(BWSensor::BWSensorType::SL);
+BWSensor SteerManager::BWMiddle = BWSensor(BWSensor::BWSensorType::SM);
+BWSensor SteerManager::BWRight = BWSensor(BWSensor::BWSensorType::SR);
 
 //Variablen für den Status der Sensoren
 boolean sL = true;
@@ -36,9 +40,9 @@ void SteerManager::loop() {
         if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
     	
         //Übernehmen der Sensorwerte aus der "SensorRead"-Klasse
-        sL = SensorRead::isSensorOnLine(SL);
-        sM = SensorRead::isSensorOnLine(SM);
-        sR = SensorRead::isSensorOnLine(SR);
+        sL = BWLeft.isBlack();
+        sM = BWMiddle.isBlack();
+        sR = BWRight.isBlack();
         
         if(sL && !sM && sR) {               //Wenn nur der mittlere Sensor schwarz ist -> gerade aus fahren
             MotorControl::driveLeft(100);
@@ -95,9 +99,7 @@ void SteerManager::loop() {
         }
     }
 }
-BWSensor SteerManager::BWLeft = BWSensor(BWSensor::BWSensorType::SL);
-BWSensor SteerManager::BWMiddle = BWSensor(BWSensor::BWSensorType::SM);
-BWSensor SteerManager::BWRight = BWSensor(BWSensor::BWSensorType::SR);
+
 
 bool SteerManager::calibrate(){ //this is not a very innovative function --> a better one is coming soon
     // UI: sign to put Sherlock on line --> TODO: Something that makes sure that Sherlock is corectly placed on line (e.g. a button input)
