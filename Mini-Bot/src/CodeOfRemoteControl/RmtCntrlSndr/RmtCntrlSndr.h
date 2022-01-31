@@ -12,9 +12,11 @@ private:
     static void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status);
 
 public:
+    
     static void setup();
     static void loop();
-    static void sendData(short speed, short turn);
+    static void sendData(short speed, short turn, boolean automaticMode);
+
 };
 
 #endif

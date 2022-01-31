@@ -1,3 +1,6 @@
+#ifndef Util_h
+#define Util_h
+
 #include <Arduino.h>
 
 //PinDefines
@@ -12,3 +15,4 @@
 #define PIN_RIGHT_MOTOR_F 1
 #define PIN_RIGHT_MOTOR_B 2
 
+#endif
