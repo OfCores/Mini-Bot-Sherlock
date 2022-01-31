@@ -108,14 +108,14 @@ bool SteerManager::calibrate(){ //this is not a very innovative function --> a b
     whiteRight = BWRight.getValue();
     blackMid = BWMiddle.getValue();
     while(BWMiddle.getValue() >= (blackMid - 50) && BWMiddle.getValue() <= (blackMid +50)){ //while sensor !left black line
-        //TODO: Motor turn right
+        MotorControl::driveRight(50);
     }
     if(whiteLeft != BWLeft.getValue()){ //not accurate but shows the algo
-        int whiteMid = BWMiddle.getValue(),blackLeft = BWLeft.getValue(),blackRight = BWRight.getValue();
+        //int whiteMid = BWMiddle.getValue(),blackLeft = BWLeft.getValue(),blackRight = BWRight.getValue();
 
-        BWLeft.setMidValue((blackLeft + whiteLeft)/2);
-        BWRight.setMidValue((blackRight + whiteRight)/2);
-        BWMiddle.setMidValue((blackMid + whiteMid)/2);
+        BWLeft.setMidValue((BWLeft.getValue() + whiteLeft)/2);
+        BWRight.setMidValue((BWRight.getValue() + whiteRight)/2);
+        BWMiddle.setMidValue((BWMiddle.getValue() + blackMid)/2);
 
         return true;// calibration succes TODO: vertify calibration through turning Sherlock in the other direction
     }else{
