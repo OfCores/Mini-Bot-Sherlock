@@ -15,6 +15,8 @@ boolean SteerManager::automaticMode;
 short SteerManager::lastState;
 
 void SteerManager::setup() {
+
+    //calibrate();
     
 }
 
@@ -57,9 +59,6 @@ void SteerManager::loop() {
             MotorControl::driveLeft(_turn);
         }
 
-
-
-        
         //LastState
         lastState = -3;
         if(sL && !sR) 
@@ -73,4 +72,28 @@ void SteerManager::loop() {
 
     }
 }
+BWSensor SteerManager::BWLeft = BWSensor(BWSensor::BWSensorType::SL);
+BWSensor SteerManager::BWMiddle = BWSensor(BWSensor::BWSensorType::SM);
+BWSensor SteerManager::BWRight = BWSensor(BWSensor::BWSensorType::SR);
 
+bool SteerManager::calibrate(){ //this is not a very innovative function --> a better one is coming soon
+    // UI: sign to put Sherlock on line --> TODO: Something that makes sure that Sherlock is corectly placed on line (e.g. a button input)
+    int blackMid, whiteLeft, whiteRight; //save sensor values 
+    whiteLeft = BWLeft.getValue();
+    whiteRight = BWRight.getValue();
+    blackMid = BWMiddle.getValue();
+    while(BWMiddle.getValue() >= (blackMid - 50) && BWMiddle.getValue() <= (blackMid +50)){ //while sensor !left black line
+        //TODO: Motor turn right
+    }
+    if(whiteLeft != BWLeft.getValue()){ //not accurate but shows the algo
+        int whiteMid = BWMiddle.getValue(),blackLeft = BWLeft.getValue(),blackRight = BWRight.getValue();
+
+        BWLeft.setMidValue((blackLeft + whiteLeft)/2);
+        BWRight.setMidValue((blackRight + whiteRight)/2);
+        BWMiddle.setMidValue((blackMid + whiteMid)/2);
+
+        return true;// calibration succes TODO: vertify calibration through turning Sherlock in the other direction
+    }else{
+        return false;// calibration failed
+    }
+}
