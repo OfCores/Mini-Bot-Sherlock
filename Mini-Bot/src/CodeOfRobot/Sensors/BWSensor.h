@@ -18,13 +18,14 @@ public:
     void setAccuracy(Accuracy accuracy) {this->accuracy = accuracy;}
 
     void setMidValue(int mid) {this->midValue = mid;} //How?
+    int getRawValue() const; //returns RAW value of a spez sensor
 
 private:
     int midValue;
     const BWSensorType type;
     Accuracy accuracy;
 
-    int getRawValue() const; //returns RAW value of a spez sensor
+    
 };
 
 #endif

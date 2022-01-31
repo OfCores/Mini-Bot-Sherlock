@@ -34,20 +34,13 @@ void RemoteControl::setup() {
   }
   esp_now_register_send_cb(OnDataSent);
   ScanForSlave();
+
+  myData.automaticMode = true;
+  myData.speed = 0;
+  myData.turn = 0;
 }
  
 void RemoteControl::loop() {
-  // ScanForSlave();
-  /* if (slave.channel == CHANNEL) { // check if slave channel is defined
-    // `slave` is defined
-    // Add slave as peer if it has not been added already
-    bool isPaired = manageSlave();
-    if (isPaired) {
-      sendData(45, 32, true);
-    } else {
-      Serial.println("Slave pair failed!");
-    }
-  } */
 }
 
 void RemoteControl::sendData(short speed, short turn, boolean automaticMode) {
@@ -183,4 +176,12 @@ void deletePeer() {
     Serial.print("Failed to delete Peer err: ");
     Serial.println(delStatus);
   }
+}
+
+void RemoteControl::setAutomaticMode(boolean _a) {
+  myData.automaticMode = _a;
+}
+
+boolean RemoteControl::getAutomaticMode() {
+  return myData.automaticMode;
 }

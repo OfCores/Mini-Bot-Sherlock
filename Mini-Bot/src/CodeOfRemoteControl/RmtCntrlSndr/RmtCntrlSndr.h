@@ -18,7 +18,9 @@ public:
     static void setup();
     static void loop();
     static void sendData(short speed, short turn, boolean automaticMode);
-
+    
+    static void setAutomaticMode(boolean _automaticMode);
+    static boolean getAutomaticMode();
 };
 
 #endif

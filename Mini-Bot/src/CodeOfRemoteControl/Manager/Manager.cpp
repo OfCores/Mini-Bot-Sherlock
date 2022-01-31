@@ -1,22 +1,21 @@
 #include "Manager.h"
 
 #define POTI_PIN 35
-#define BUTTON_PIN 32
+#define BUTTON_PIN 33
 
 #define JOY_STICK_PIN_X 34
 #define JOY_STICK_PIN_Y 35
 
 
-boolean Manager::automaticMode = true;
-
 void Manager::setup() {
     Serial.println("------ Remote Control -------");
+    pinMode(BUTTON_PIN, INPUT_PULLUP);
     RemoteControl::setup();
 }   
 
 void Manager::loop() {
     // RemoteControl::loop();
-    RemoteControl::sendData(getJoyStickSpeed(), getJoyStickTurn(), automaticMode);
+    RemoteControl::sendData(getJoyStickSpeed(), getJoyStickTurn(), RemoteControl::getAutomaticMode());
     manageButton();
     delay(250);
 }
@@ -33,13 +32,14 @@ int Manager::getSpeed() {
 //JoyStick Methoden
 //Button des JoySticks um den Fahrmodus zu ändern
 void Manager::manageButton() {
-    boolean result = analogRead(BUTTON_PIN);
-    if(result > 200) {
-        switch(automaticMode) {
-            case true: automaticMode = false; break;
-            case false: automaticMode = true; break;
+    int result = digitalRead(BUTTON_PIN);
+    Serial.println(result);
+    if(result == LOW) {
+        switch(RemoteControl::getAutomaticMode()) {
+            case true: RemoteControl::setAutomaticMode(false); break;
+            case false: RemoteControl::setAutomaticMode(true); break;
         }
-        Serial.print("AutomaticMode: "); Serial.println(automaticMode);
+        Serial.print("AutomaticMode: "); Serial.println(RemoteControl::getAutomaticMode());
         delay(500);
     }
 }

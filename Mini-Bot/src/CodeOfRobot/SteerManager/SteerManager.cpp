@@ -33,18 +33,20 @@ void SteerManager::loop() {
     lastTurn = turn;
     turn = RemoteControlRobot::getTurn();
     speed = RemoteControlRobot::getSpeed();
-    automaticMode = true;
     automaticMode = RemoteControlRobot::getAutomaticMode();
 
     if(automaticMode == true) {             //Fahrmodus überprüfen
-        if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
+        // if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
     	
         //Übernehmen der Sensorwerte aus der "SensorRead"-Klasse
         sL = BWLeft.isBlack();
         sM = BWMiddle.isBlack();
         sR = BWRight.isBlack();
+
+        Serial.print(sL); Serial.print("|"); Serial.print(sM); Serial.print("|"); Serial.println(sR);
+        Serial.print(BWLeft.getRawValue()); Serial.print("|"); Serial.print(BWMiddle.getRawValue()); Serial.print("|"); Serial.println(BWRight.getRawValue());
         
-        if(sL && !sM && sR) {               //Wenn nur der mittlere Sensor schwarz ist -> gerade aus fahren
+        if(!sL && sM && !sR) {               //Wenn nur der mittlere Sensor schwarz ist -> gerade aus fahren
             MotorControl::driveLeft(100);
             MotorControl::driveRight(100);
         }

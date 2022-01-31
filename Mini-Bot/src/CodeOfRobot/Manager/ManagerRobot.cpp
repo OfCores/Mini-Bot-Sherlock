@@ -12,7 +12,7 @@ void ManagerRobot::setup() {
 
 void ManagerRobot::loop() {
 
-  // SteerManager::loop();
+  SteerManager::loop();
   vTaskDelay(STEERING_LOOP_LENGTH/portTICK_PERIOD_MS);
 }
 
