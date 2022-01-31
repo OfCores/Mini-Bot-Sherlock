@@ -10,7 +10,9 @@ class RemoteControl
 private:
     struct struct_message;
     static void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status);
-
+    static void ScanForSlave();
+    static bool manageSlave();
+    static void deletePeer();
 public:
     
     static void setup();

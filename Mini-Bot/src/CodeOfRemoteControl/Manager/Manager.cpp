@@ -1,10 +1,10 @@
 #include "Manager.h"
 
 #define POTI_PIN 35
-#define BUTTON_PIN 40
+#define BUTTON_PIN 32
 
-#define JOY_STICK_PIN_X 20
-#define JOY_STICK_PIN_Y 20
+#define JOY_STICK_PIN_X 34
+#define JOY_STICK_PIN_Y 35
 
 
 boolean Manager::automaticMode = true;
@@ -15,10 +15,10 @@ void Manager::setup() {
 }   
 
 void Manager::loop() {
-    RemoteControl::loop();
-    RemoteControl::sendData(getSpeed(), 0, automaticMode);
+    // RemoteControl::loop();
+    RemoteControl::sendData(getJoyStickSpeed(), getJoyStickTurn(), automaticMode);
     manageButton();
-    delay(500);
+    delay(250);
 }
 
 //Mothode zur Detektion des Potis für die Geschwindigkeit
@@ -33,12 +33,13 @@ int Manager::getSpeed() {
 //JoyStick Methoden
 //Button des JoySticks um den Fahrmodus zu ändern
 void Manager::manageButton() {
-    boolean result = digitalRead(BUTTON_PIN);
-    if(result == HIGH) {
+    boolean result = analogRead(BUTTON_PIN);
+    if(result > 200) {
         switch(automaticMode) {
             case true: automaticMode = false; break;
             case false: automaticMode = true; break;
         }
+        Serial.print("AutomaticMode: "); Serial.println(automaticMode);
         delay(500);
     }
 }

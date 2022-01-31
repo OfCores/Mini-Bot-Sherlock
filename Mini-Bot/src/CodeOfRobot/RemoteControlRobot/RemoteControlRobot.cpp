@@ -12,6 +12,8 @@ typedef struct struct_message {
 } struct_message;
 
 struct_message myDataRobot;
+#define CHANNEL 0
+
 
 // Funktion die ausgeführt wird wenn die Fernbedienung Werte schickt
 void RemoteControlRobot::OnDataRecvRobot(const uint8_t * mac, const uint8_t *incomingData, int len) {
@@ -27,6 +29,9 @@ void RemoteControlRobot::OnDataRecvRobot(const uint8_t * mac, const uint8_t *inc
  
 void RemoteControlRobot::setup() {
   WiFi.mode(WIFI_STA);
+  configDeviceAP();
+  WiFi.disconnect();
+  Serial.println("RemoteControlRobot");
 
   // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
@@ -40,9 +45,23 @@ void RemoteControlRobot::setup() {
   Serial.println(WiFi.macAddress());
 
   esp_now_register_recv_cb(OnDataRecvRobot);
+  myDataRobot.automaticMode = true;
+  myDataRobot.speed = 100;
+  myDataRobot.turn = 0;
 }
  
 void RemoteControlRobot::loop() {}
+
+// config AP SSID
+void RemoteControlRobot::configDeviceAP() {
+  const char *SSID = "Slave_1";
+  bool result = WiFi.softAP(SSID, "Slave_1_Password", CHANNEL, 0);
+  if (!result) {
+    Serial.println("AP Config failed.");
+  } else {
+    Serial.println("AP Config Success. Broadcasting with AP: " + String(SSID));
+  }
+}
 
 short RemoteControlRobot::getSpeed() {
     return myDataRobot.speed;

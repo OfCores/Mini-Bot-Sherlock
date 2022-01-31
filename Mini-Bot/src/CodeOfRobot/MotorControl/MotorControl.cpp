@@ -14,7 +14,7 @@ void MotorControl::loop() {
 }
 
 void MotorControl::driveLeft(double speed) {
-    totalSpeed = RemoteControlRobot::getSpeed(); //Verechnung mit der Geschwindigkeit
+    totalSpeed = 100;//RemoteControlRobot::getSpeed(); //Verechnung mit der Geschwindigkeit
     speed = speed * (totalSpeed / 100);
     speed = round(speed * 2.5);                 //Skalieren von Prozent auf 255 mV
     if(speed < 0) {
@@ -28,7 +28,7 @@ void MotorControl::driveLeft(double speed) {
 }
 
 void MotorControl::driveRight(double speed) {
-    totalSpeed = RemoteControlRobot::getSpeed();
+    totalSpeed = 100;//RemoteControlRobot::getSpeed();
     speed = speed * (totalSpeed / 100);
     speed = round(speed * 2.5);
     if(speed < 0) {

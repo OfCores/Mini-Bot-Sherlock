@@ -11,7 +11,7 @@ private:
     static void RemoteSetup();
     static void RemoteLoop();
     static void OnDataRecvRobot(const uint8_t * mac, const uint8_t *incomingData, int len);
-
+    static void configDeviceAP();
 public:
     static void setup();
     static void loop();

@@ -4,13 +4,15 @@
 
 void ManagerRobot::setup() {
   Serial.println("------ Robot -------");
+
   RemoteControlRobot::setup();
   SteerManager::setup();
   // xTaskCreate(loop2, "Loop2", 2048, NULL, 0, NULL);
 }
 
 void ManagerRobot::loop() {
-  SteerManager::loop();
+
+  // SteerManager::loop();
   vTaskDelay(STEERING_LOOP_LENGTH/portTICK_PERIOD_MS);
 }
 
