@@ -1,5 +1,9 @@
 #include "SteerManager.h"
-#include "../SensorRead/SensorRead.h"
+#include "../sensors/BWSensor.h"
+
+BWSensor SteerManager::BWLeft = BWSensor(BWSensor::BWSensorType::SL);
+BWSensor SteerManager::BWMiddle = BWSensor(BWSensor::BWSensorType::SM);
+BWSensor SteerManager::BWRight = BWSensor(BWSensor::BWSensorType::SR);
 
 //Variablen für den Status der Sensoren
 boolean sL = true;
@@ -19,6 +23,8 @@ boolean SteerManager::automaticMode;
 short SteerManager::lastState;
 
 void SteerManager::setup() {
+
+    //calibrate();
     
 }
 
@@ -34,9 +40,9 @@ void SteerManager::loop() {
         if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
     	
         //Übernehmen der Sensorwerte aus der "SensorRead"-Klasse
-        sL = SensorRead::isSensorOnLine(SL);
-        sM = SensorRead::isSensorOnLine(SM);
-        sR = SensorRead::isSensorOnLine(SR);
+        sL = BWLeft.isBlack();
+        sM = BWMiddle.isBlack();
+        sR = BWRight.isBlack();
         
         if(sL && !sM && sR) {               //Wenn nur der mittlere Sensor schwarz ist -> gerade aus fahren
             MotorControl::driveLeft(100);
@@ -71,6 +77,7 @@ void SteerManager::loop() {
             MotorControl::driveRight(100);
             MotorControl::driveLeft(_turn);
         }
+
         
         //LastState
         lastState = -3;
@@ -93,3 +100,25 @@ void SteerManager::loop() {
     }
 }
 
+
+bool SteerManager::calibrate(){ //this is not a very innovative function --> a better one is coming soon
+    // UI: sign to put Sherlock on line --> TODO: Something that makes sure that Sherlock is corectly placed on line (e.g. a button input)
+    int blackMid, whiteLeft, whiteRight; //save sensor values 
+    whiteLeft = BWLeft.getValue();
+    whiteRight = BWRight.getValue();
+    blackMid = BWMiddle.getValue();
+    while(BWMiddle.getValue() >= (blackMid - 50) && BWMiddle.getValue() <= (blackMid +50)){ //while sensor !left black line
+        MotorControl::driveRight(50);
+    }
+    if(whiteLeft != BWLeft.getValue()){ //not accurate but shows the algo
+        //int whiteMid = BWMiddle.getValue(),blackLeft = BWLeft.getValue(),blackRight = BWRight.getValue();
+
+        BWLeft.setMidValue((BWLeft.getValue() + whiteLeft)/2);
+        BWRight.setMidValue((BWRight.getValue() + whiteRight)/2);
+        BWMiddle.setMidValue((BWMiddle.getValue() + blackMid)/2);
+
+        return true;// calibration succes TODO: vertify calibration through turning Sherlock in the other direction
+    }else{
+        return false;// calibration failed
+    }
+}

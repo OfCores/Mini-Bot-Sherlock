@@ -5,6 +5,7 @@
 #include "../MotorControl/MotorControl.h"
 #include "../RemoteControlRobot/RemoteControlRobot.h"
 #include "../Util/Util.h"
+#include "../Sensors/BWSensor.h"
 
 
 class SteerManager
@@ -15,10 +16,16 @@ private:
     static short lastTurn;
     static boolean automaticMode;
     static short lastState;
+    
+    static BWSensor BWLeft;
+    static BWSensor BWMiddle;
+    static BWSensor BWRight;
 
 public:
     static void setup();
     static void loop();
+
+    static bool calibrate(); 
 };
 
 
