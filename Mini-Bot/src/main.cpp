@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define isRemoteControl false
+#define isRemoteControl true
 #if !isRemoteControl
 
 #include "CodeOfRobot/CodeOfRobot.h"

@@ -1,9 +1,9 @@
 #include "SteerManager.h"
 #include "../sensors/BWSensor.h"
 
-BWSensor SteerManager::BWLeft = BWSensor(BWSensor::BWSensorType::SL);
-BWSensor SteerManager::BWMiddle = BWSensor(BWSensor::BWSensorType::SM);
-BWSensor SteerManager::BWRight = BWSensor(BWSensor::BWSensorType::SR);
+BWSensor SteerManager::BWLeft = BWSensor(BWSensor::BWSensorType::SL, 18);
+BWSensor SteerManager::BWMiddle = BWSensor(BWSensor::BWSensorType::SM, 19);
+BWSensor SteerManager::BWRight = BWSensor(BWSensor::BWSensorType::SR, 21);
 
 //Variablen für den Status der Sensoren
 boolean sL = true;
@@ -21,6 +21,8 @@ short SteerManager::turn;
 short SteerManager::lastTurn;
 boolean SteerManager::automaticMode;
 short SteerManager::lastState;
+
+int automaticModeLedSwitch = 0;
 
 void SteerManager::setup() {
 
@@ -43,8 +45,8 @@ void SteerManager::loop() {
         sM = BWMiddle.isBlack();
         sR = BWRight.isBlack();
 
-        Serial.print(sL); Serial.print("|"); Serial.print(sM); Serial.print("|"); Serial.println(sR);
-        Serial.print(BWLeft.getRawValue()); Serial.print("|"); Serial.print(BWMiddle.getRawValue()); Serial.print("|"); Serial.println(BWRight.getRawValue());
+        // Serial.print(sL); Serial.print("|"); Serial.print(sM); Serial.print("|"); Serial.println(sR);
+        // Serial.print(BWLeft.getRawValue()); Serial.print("|"); Serial.print(BWMiddle.getRawValue()); Serial.print("|"); Serial.println(BWRight.getRawValue());
         
         if(!sL && sM && !sR) {               //Wenn nur der mittlere Sensor schwarz ist -> gerade aus fahren
             MotorControl::driveLeft(100);
@@ -91,14 +93,19 @@ void SteerManager::loop() {
             lastState = 0;
 
     } else {
+        BWRight.setLed(0); 
+        BWLeft.setLed(0);
         if(turn < 0) { //Bot soll nach links fahren
             turn = turn * (-1);
             MotorControl::driveRight(100);
             MotorControl::driveLeft(100-turn);
+            BWLeft.setLed(255);         
         } else { //Bot soll nach rechts fahren
             MotorControl::driveRight(100-turn);
-            MotorControl::driveLeft(100);        
-        }
+            MotorControl::driveLeft(100);     
+            BWRight.setLed(255);     
+        } 
+        BWMiddle.setLed((++automaticModeLedSwitch%2 == 0)?0:255); 
     }
 }
 

@@ -4,6 +4,12 @@ BWSensor::BWSensor(BWSensorType type, Accuracy accuracy) : type(type), accuracy(
 
 }
 
+BWSensor::BWSensor(BWSensorType type, int pin_led, Accuracy accuracy) : type(type), pin_led(pin_led), accuracy(accuracy) {
+
+}
+
+
+
 int BWSensor::getValue()const {
     int storage = 0;
     for(int i = 0; i < accuracy; i++){ 
@@ -17,7 +23,14 @@ int BWSensor::getRawValue() const {
 }
 
 bool BWSensor::isBlack() const{ 
-     return getValue() > midValue;
+    boolean _b = getValue() > midValue;
+    ((BWSensor*)this)->setLed(_b?0:255);
+    return _b;
+}
+
+void BWSensor::setLed(int _dim) {
+    analogWrite(((BWSensor*)this)->pin_led, _dim);
+    Serial.println("LED high");
 }
 
  

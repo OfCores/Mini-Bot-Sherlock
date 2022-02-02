@@ -9,10 +9,10 @@
 #define PIN_SM 33
 #define PIN_SR 34
 
-#define PIN_LEFT_MOTOR_F 18
-#define PIN_LEFT_MOTOR_B 21
+#define PIN_LEFT_MOTOR_F 2
+#define PIN_LEFT_MOTOR_B 16
 
-#define PIN_RIGHT_MOTOR_F 17
-#define PIN_RIGHT_MOTOR_B 19
+#define PIN_RIGHT_MOTOR_F 15
+#define PIN_RIGHT_MOTOR_B 4
 
 #endif

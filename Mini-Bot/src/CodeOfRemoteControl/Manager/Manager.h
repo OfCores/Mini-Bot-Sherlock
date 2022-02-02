@@ -3,6 +3,7 @@
 
 #include "../Util/Util.h"
 #include "../RmtCntrlSndr/RmtCntrlSndr.h"
+#include "../JoyStick/JoyStick.h"
 
 class Manager
 {
