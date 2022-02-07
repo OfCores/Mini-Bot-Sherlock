@@ -8,7 +8,7 @@ BWSensor SteerManager::BWMiddle = BWSensor(BWSensor::BWSensorType::SM, 19);
 BWSensor SteerManager::BWRight = BWSensor(BWSensor::BWSensorType::SR, 21);
 
 // set to true to activate Bluetooth
-#define enableBluetooth false
+#define enableBluetooth 1
 
 //Variablen für den Status der Sensoren
 boolean sL = true;
