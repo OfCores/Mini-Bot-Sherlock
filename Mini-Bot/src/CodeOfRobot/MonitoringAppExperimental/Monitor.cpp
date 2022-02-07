@@ -1,21 +1,22 @@
 // Complete project details at https://randomnerdtutorials.com
 
 #include "Monitor.h"
+//#include "BluetoothSerial.h"
 
 // Check if Bluetooth configs are enabled
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
-BluetoothSerial SerialBT;
+/*BluetoothSerial SerialBT;
 
 String message = "";
 char incomingChar;
 
-void setupBluetooth(){
+void Monitor::setupBluetooth(){
    SerialBT.begin("Mini Bot Sherlock");
 }
  
-bool sendMessage(String message){
+bool Monitor::sendMessage(String message){
     if(SerialBT.available()){
         SerialBT.println(message);
         //ToDo: vertify message delivered
@@ -25,7 +26,7 @@ bool sendMessage(String message){
     }
 }
 
-String getMessage(){
+String Monitor::getMessage(){
 if (SerialBT.available()){
         char incomingChar = SerialBT.read();
         if (incomingChar != '\n'){
@@ -38,4 +39,4 @@ if (SerialBT.available()){
       }
 }
 
-  
+  */

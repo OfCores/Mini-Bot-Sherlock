@@ -1,9 +1,14 @@
 #include "SteerManager.h"
 #include "../sensors/BWSensor.h"
 
+#include "../MonitoringAppExperimental/Monitor.h"
+
 BWSensor SteerManager::BWLeft = BWSensor(BWSensor::BWSensorType::SL, 18);
 BWSensor SteerManager::BWMiddle = BWSensor(BWSensor::BWSensorType::SM, 19);
 BWSensor SteerManager::BWRight = BWSensor(BWSensor::BWSensorType::SR, 21);
+
+// set to true to activate Bluetooth
+#define enableBluetooth false
 
 //Variablen für den Status der Sensoren
 boolean sL = true;
@@ -26,6 +31,10 @@ int automaticModeLedSwitch = 0;
 
 void SteerManager::setup() {
 
+    #if enableBluetooth
+    Monitor::setupBluetooth(); //activates Bluetoothcommunication BLUETOOTH
+    #endif
+
     //calibrate();
     
 }
@@ -44,7 +53,10 @@ void SteerManager::loop() {
         sL = BWLeft.isBlack();
         sM = BWMiddle.isBlack();
         sR = BWRight.isBlack();
-
+        
+        #if enableBluetooth
+        Monitor::sendMessage("SensorL: " + BWLeft.getRawValue());
+        #endif
         // Serial.print(sL); Serial.print("|"); Serial.print(sM); Serial.print("|"); Serial.println(sR);
         // Serial.print(BWLeft.getRawValue()); Serial.print("|"); Serial.print(BWMiddle.getRawValue()); Serial.print("|"); Serial.println(BWRight.getRawValue());
         

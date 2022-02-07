@@ -21,6 +21,7 @@ public:
 
     void setMidValue(int mid) {this->midValue = mid;} //How?
     int getRawValue() const; //returns RAW value of a spez sensor
+    
     void setLed(int dim);
 
 private:
