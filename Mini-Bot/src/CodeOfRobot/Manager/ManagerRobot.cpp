@@ -1,6 +1,6 @@
 #include "ManagerRobot.h"
 
-#define STEERING_LOOP_LENGTH 250
+#define STEERING_LOOP_LENGTH 2000
 
 void ManagerRobot::setup() {
   Serial.println("------ Robot -------");

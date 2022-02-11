@@ -25,7 +25,7 @@ public:
     void setLed(int dim);
 
 private:
-    int midValue;
+    int midValue = 400;
     const BWSensorType type;
     int pin_led;
     Accuracy accuracy;

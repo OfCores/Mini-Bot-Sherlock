@@ -19,7 +19,7 @@ void MotorControl::driveLeft(double speed) {
     totalSpeed = RemoteControlRobot::getSpeed(); //Verechnung mit der Geschwindigkeit
     speed = speed * (totalSpeed / 100);
     speed = round(speed * 2.5);                 //Skalieren von Prozent auf 255 mV
-    Serial.println(speed);
+    // Serial.println(speed);
     if(speed < 0) {
         speed = speed * (-1);
         constrain(speed, lowestExecutableVoltage, 255);
