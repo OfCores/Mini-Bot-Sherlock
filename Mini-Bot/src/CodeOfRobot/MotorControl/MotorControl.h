@@ -15,6 +15,8 @@ class MotorControl
         static void loop();
         static void driveLeft(double speed);
         static void driveRight(double speed);
+        static void driveForward(double speed);
+        static void stop();
 };
 
 #endif
