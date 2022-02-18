@@ -13,15 +13,18 @@ String message = "";
 char incomingChar;
 
 void Monitor::setupBluetooth(){
-   SerialBT.begin("Mini Bot Sherlock");
+   SerialBT.begin("Sherlock");
 }
  
 bool Monitor::sendMessage(String message){
     if(SerialBT.available()){
         SerialBT.println(message);
+        Serial.println("sent message!");
         //ToDo: vertify message delivered
         return true;
     }else{
+        Serial.println("failed!");
+
         return false;
     }
 }

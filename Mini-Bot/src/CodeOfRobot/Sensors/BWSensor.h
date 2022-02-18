@@ -20,6 +20,8 @@ public:
     void setAccuracy(Accuracy accuracy) {this->accuracy = accuracy;}
 
     void setMidValue(int mid) {this->midValue = mid;} //How?
+    
+    int getMidValue() const {return this ->midValue;} //return calibration values
     int getRawValue() const; //returns RAW value of a spez sensor
     
     void setLed(int dim);
