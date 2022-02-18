@@ -29,8 +29,8 @@ bool Monitor::sendMessage(String message){
     }
 }
 
-String Monitor::getMessage(){
-if (SerialBT.available()){
+/*String Monitor::getMessage(){
+  if (SerialBT.available()){
         char incomingChar = SerialBT.read();
         if (incomingChar != '\n'){
           message += String(incomingChar);
@@ -41,5 +41,6 @@ if (SerialBT.available()){
         return message;  
       }
 }
+*/
 
   

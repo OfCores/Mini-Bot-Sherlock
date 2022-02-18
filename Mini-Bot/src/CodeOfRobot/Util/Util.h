@@ -9,6 +9,9 @@
 #define PIN_SM 33
 #define PIN_SR 34
 
+#define SERVO_TILT 25
+#define SERVO_THRIGGER 26
+
 #define PIN_LEFT_MOTOR_F 15
 #define PIN_LEFT_MOTOR_B 4
 

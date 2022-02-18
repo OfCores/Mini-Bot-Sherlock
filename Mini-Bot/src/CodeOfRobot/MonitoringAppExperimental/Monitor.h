@@ -14,7 +14,7 @@ private:
 public:
     static bool sendMessage(String message);
     static void setupBluetooth();
-    static String getMessage();
+    String getMessage();
 };
 
 #endif
