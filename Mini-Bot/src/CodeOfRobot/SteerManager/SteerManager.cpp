@@ -33,7 +33,7 @@ void SteerManager::setup() {
 
     #if enableBluetooth
         Monitor::setupBluetooth(); //activates Bluetoothcommunication #BLUETOOTH
-        Serial.println("Bluetooth!!!");
+        //Serial.println("Bluetooth!!!");
         //Monitor::sendMessage("SteerManager active:");
     #endif
 
@@ -57,14 +57,14 @@ void SteerManager::loop() {
         sR = BWRight.isBlack();
         
         #if enableBluetooth
-        Serial.println("Bluetooth is in loop!");
-        if(Monitor::getMessage() == "BWRaw"){  //checks input Mode #BLUETOOTH
-            Monitor::sendMessage("Raw-  " + String (BWLeft.getRawValue()) + " | " + String(BWMiddle.getRawValue()) + " | " + String(BWRight.getRawValue()));
-            Serial.println("Send Message...");
-        }
-        if(Monitor::getMessage() == "BWBool"){  //checks input Mode #BLUETOOTH
+        //Serial.println("Bluetooth is in loop!");
+        //if(Monitor::getMessage() == "BWRaw"){  //checks input Mode #BLUETOOTH
+            //Monitor::sendMessage("Raw-  " + String (BWLeft.getRawValue()) + " | " + String(BWMiddle.getRawValue()) + " | " + String(BWRight.getRawValue()));
+            //Serial.println("Send Message...");
+        //}
+        //if(Monitor::getMessage() == "BWBool"){  //checks input Mode #BLUETOOTH
             Monitor::sendMessage("Bool- " + String (BWLeft.getValue()) + " | " + String(BWMiddle.getValue()) + " | " + String(BWRight.getValue()));
-        }
+        //}
         #endif
         // Serial.print(sL); Serial.print("|"); Serial.print(sM); Serial.print("|"); Serial.println(sR);
         // Serial.print(BWLeft.getRawValue()); Serial.print("|"); Serial.print(BWMiddle.getRawValue()); Serial.print("|"); Serial.println(BWRight.getRawValue());
@@ -148,7 +148,7 @@ bool SteerManager::calibrate(){ //this is not a very innovative function --> a b
         BWMiddle.setMidValue((BWMiddle.getValue() + blackMid)/2);
 
         #if enableBluetooth
-            Monitor::sendMessage("Calibration succes: " + String (BWLeft.getMidValue()) + " | " + String(BWMiddle.getMidValue()) + " | " + String(BWRight.getMidValue())); //monitors Calibration values #BLUETOOTH
+           // Monitor::sendMessage("Calibration succes: " + String (BWLeft.getMidValue()) + " | " + String(BWMiddle.getMidValue()) + " | " + String(BWRight.getMidValue())); //monitors Calibration values #BLUETOOTH
         #endif
 
         return true;// calibration succes TODO: vertify calibration through turning Sherlock in the other direction

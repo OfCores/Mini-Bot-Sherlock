@@ -23,7 +23,7 @@ bool Monitor::sendMessage(String message){
         //ToDo: vertify message delivered
         return true;
     }else{
-        Serial.println("failed!");
+        Serial.println("Bluetooth failed!");
 
         return false;
     }
