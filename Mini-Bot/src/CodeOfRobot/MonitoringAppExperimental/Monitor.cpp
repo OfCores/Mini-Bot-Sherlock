@@ -7,6 +7,7 @@
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
+
 BluetoothSerial SerialBT;
 
 String message = "";
@@ -29,7 +30,7 @@ bool Monitor::sendMessage(String message){
     }
 }
 
-/*String Monitor::getMessage(){
+String Monitor::getMessage(){
   if (SerialBT.available()){
         char incomingChar = SerialBT.read();
         if (incomingChar != '\n'){
@@ -41,6 +42,6 @@ bool Monitor::sendMessage(String message){
         return message;  
       }
 }
-*/
+
 
   

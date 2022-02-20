@@ -12,6 +12,7 @@ Servo STilt;
 Servo SThrigger;
 
 int attemptCounter;
+int pos;
 
 
 void TuretControl::setupTuret(){
@@ -21,9 +22,9 @@ void TuretControl::setupTuret(){
     //SThrigger.write(POS_MIN_THRIGGER);
 }
 
-bool TuretControl::tilt(int pos){
-    //Todo: map pos to POS_MAX and POS_MIN
-    if(pos > POS_MAX_TILT && pos < POS_MIN_TILT){ //check if pos is invalid
+bool TuretControl::tilt(int input){
+    pos = map(input,0,90,POS_MIN_TILT,POS_MAX_TILT); //test what happens if wrong values
+    if(pos > POS_MAX_TILT && pos < POS_MIN_TILT){ //ensures that pos is invalid
         attemptCounter = 0;
         while(getCurentTilt() != pos){
             STilt.write(pos);
@@ -58,3 +59,8 @@ bool TuretControl::thrigger(int pos){
 int TuretControl::getCurrentThrigger(){
     return SThrigger.read();
 }
+
+
+//additional ideas:
+// -reset function to reset max min position values
+// -UI Output if thrigger is close to Critical position

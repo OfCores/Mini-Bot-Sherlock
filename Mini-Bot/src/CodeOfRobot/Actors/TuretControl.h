@@ -15,10 +15,10 @@ private:
    
 public:
     static void setupTuret();
-    bool tilt(int degree); //returns false if Servo blocked or value invalid degree: 0-90°
-    bool thrigger(int degree);
-    int getCurentTilt();
-    int getCurrentThrigger();
+    static bool tilt(int degree); //returns false if Servo blocked or value invalid degree: 0-90°
+    static bool thrigger(int degree);
+    static int getCurentTilt();
+    static int getCurrentThrigger();
 };
 
 #endif
