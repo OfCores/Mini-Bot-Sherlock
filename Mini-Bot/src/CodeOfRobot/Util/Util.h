@@ -16,8 +16,10 @@
 
 #define PIN_LEFT_MOTOR_F 26 //rot
 #define PIN_LEFT_MOTOR_B 27 //gelb
+#define PIN_LEFT_GENERAL 4
 
 #define PIN_RIGHT_MOTOR_F 17 //grün
 #define PIN_RIGHT_MOTOR_B 16   //blau
+#define PIN_RIGHT_GENERAL 22 
 
 #endif

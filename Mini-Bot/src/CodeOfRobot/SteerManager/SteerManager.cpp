@@ -18,9 +18,9 @@ boolean sR = true;
 
 //Defines für das Einlenken
 #define HARD_TURN_PERCENTAEG 30
-#define TURN_MEDIUM 30
+#define TURN_MEDIUM 50
 #define TURN_RADICAL 0
-#define MAX_SPEED 60
+#define MAX_SPEED 80
 
 //sonstige Variablen
 short SteerManager::speed;
@@ -54,6 +54,8 @@ void SteerManager::loop() {
     speed = RemoteControlRobot::getSpeed();
     automaticMode = RemoteControlRobot::getAutomaticMode();
 
+    /* MotorControl::driveForward(100);
+    return; */
     // FrontLight::shine(250, Mode::ON); //Test Lights
 
     if(automaticMode == true) {             //Fahrmodus überprüfen
@@ -64,7 +66,7 @@ void SteerManager::loop() {
         sM = BWMiddle.isOnLine();
         sR = BWRight.isOnLine();
 
-        #if enableBluetooth
+        /* #if enableBluetooth
         //Serial.println("Bluetooth is in loop!");
         //if(Monitor::getMessage() == "BWRaw"){  //checks input Mode #BLUETOOTH
             //Monitor::sendMessage("Raw-  " + String (BWLeft.getRawValue()) + " | " + String(BWMiddle.getRawValue()) + " | " + String(BWRight.getRawValue()));
@@ -73,15 +75,14 @@ void SteerManager::loop() {
         //if(Monitor::getMessage() == "BWBool"){  //checks input Mode #BLUETOOTH
             Monitor::sendMessage("Bool- " + String (BWLeft.getValue()) + " | " + String(BWMiddle.getValue()) + " | " + String(BWRight.getValue()));
         //}
-        #endif
+        #endif */
         Serial.print(sL); Serial.print("|"); Serial.print(sM); Serial.print("|"); Serial.println(sR);
         Serial.print(BWLeft.getRawValue()); Serial.print("|"); Serial.print(BWMiddle.getRawValue()); Serial.print("|"); Serial.println(BWRight.getRawValue());
         
         MotorControl::stop();
 
         if((!sL && sM && !sR) || (sL && sM && sR)) {               //Wenn nur der mittlere Sensor auf der Linie ist -> gerade aus fahren
-            MotorControl::driveLeft(MAX_SPEED);
-            MotorControl::driveRight(MAX_SPEED);
+            MotorControl::driveForward(MAX_SPEED);
         }
 
         /* if(sL && sM && sR) {                //Wenn die Optokoppler alle auf der Linie sind, dann...

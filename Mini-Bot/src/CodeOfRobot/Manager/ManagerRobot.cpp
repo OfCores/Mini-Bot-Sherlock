@@ -1,20 +1,19 @@
 #include "ManagerRobot.h"
 
-#define STEERING_LOOP_LENGTH 0
+#define STEERING_LOOP_LENGTH 1000
 
 void ManagerRobot::setup() {
   Serial.println("------ Robot -------");
-
+  pinMode(23, INPUT);
   RemoteControlRobot::setup();
   SteerManager::setup();
-  pinMode(23, INPUT);
+  MotorControl::setup();
 
   // SteerManager::calibrate();
   // xTaskCreate(loop2, "Loop2", 2048, NULL, 0, NULL);
 }
 
 void ManagerRobot::loop() {
-
   SteerManager::loop();
   if(digitalRead(23) == HIGH) {
     SteerManager::calibrate();
