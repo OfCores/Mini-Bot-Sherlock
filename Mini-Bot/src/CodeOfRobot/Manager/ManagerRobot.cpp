@@ -7,6 +7,7 @@ void ManagerRobot::setup() {
 
   RemoteControlRobot::setup();
   SteerManager::setup();
+
   // SteerManager::calibrate();
   // xTaskCreate(loop2, "Loop2", 2048, NULL, 0, NULL);
 }

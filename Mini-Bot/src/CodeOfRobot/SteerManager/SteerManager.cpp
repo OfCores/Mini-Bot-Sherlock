@@ -3,9 +3,9 @@
 
 #include "../MonitoringAppExperimental/Monitor.h"
 
-BWSensor SteerManager::BWLeft = BWSensor("SLinks", BWSensor::BWSensorType::SL, 18);
+BWSensor SteerManager::BWLeft = BWSensor("SLinks", BWSensor::BWSensorType::SL, 21);
 BWSensor SteerManager::BWMiddle = BWSensor("SMitte", BWSensor::BWSensorType::SM, 19);
-BWSensor SteerManager::BWRight = BWSensor("SRechts", BWSensor::BWSensorType::SR, 21);
+BWSensor SteerManager::BWRight = BWSensor("SRechts", BWSensor::BWSensorType::SR, 18);
 
 // set to true to activate Bluetooth
 #define enableBluetooth 1
@@ -19,7 +19,7 @@ boolean sR = true;
 #define HARD_TURN_PERCENTAGE 10
 #define TURN_MEDIUM 70
 #define TURN_RADICAL 0
-#define MAX_SPEED 90
+#define MAX_SPEED 100
 
 //sonstige Variablen
 short SteerManager::speed;
@@ -91,21 +91,26 @@ void SteerManager::loop() {
         if(!sL && sR) {         //Der rechte Optokoppler ist auf der Linie -> fährt nach rechts
             MotorControl::driveLeft(MAX_SPEED);
             MotorControl::driveRight(_turn);
+            lastState = 1;
         }
         if(sL && !sR) {          //Der linke Optokoppler ist auf der Linie -> fährt nach links
             MotorControl::driveRight(MAX_SPEED);
             MotorControl::driveLeft(_turn);
+            lastState = -1;
         }
 
+        /* if(!sL && !sM && !sR) {
+            if(lastState == 1) {         //Der rechte Optokoppler ist auf der Linie -> fährt nach rechts
+                MotorControl::driveLeft(MAX_SPEED);
+                MotorControl::driveRight(_turn);
+            }
+            if(lastState == -1) {          //Der linke Optokoppler ist auf der Linie -> fährt nach links
+                MotorControl::driveRight(MAX_SPEED);
+                MotorControl::driveLeft(_turn);
+            }
+        } */
         
-        //LastState
-        /* lastState = -3;
-        if(sL && !sR) 
-            lastState = 1;
-        if(!sL && sR) 
-            lastState = -1;
-        if(sL && !sM && sR) 
-            lastState = 0; */
+
 
     } else {
         BWRight.setLed(0); 

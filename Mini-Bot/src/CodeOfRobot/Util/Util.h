@@ -5,9 +5,9 @@
 
 //PinDefines
 
-#define PIN_SL 32
-#define PIN_SM 33
-#define PIN_SR 34
+#define PIN_SL 34
+#define PIN_SM 32
+#define PIN_SR 33
 
 #define PIN_LEFT_MOTOR_F 2
 #define PIN_LEFT_MOTOR_B 16
