@@ -12,6 +12,8 @@
 #define SERVO_TILT 25
 #define SERVO_THRIGGER 26
 
+#define FLight 17
+
 #define PIN_LEFT_MOTOR_F 15
 #define PIN_LEFT_MOTOR_B 4
 

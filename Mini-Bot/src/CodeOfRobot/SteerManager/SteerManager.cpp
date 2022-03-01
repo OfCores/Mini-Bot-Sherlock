@@ -3,6 +3,10 @@
 
 #include "../MonitoringAppExperimental/Monitor.h"
 
+#include "../Actors/TuretControl.h"
+
+#include "../Actors/FrontLight.h"
+
 BWSensor SteerManager::BWLeft = BWSensor(BWSensor::BWSensorType::SL, 18);
 BWSensor SteerManager::BWMiddle = BWSensor(BWSensor::BWSensorType::SM, 19);
 BWSensor SteerManager::BWRight = BWSensor(BWSensor::BWSensorType::SR, 21);
@@ -31,12 +35,13 @@ int automaticModeLedSwitch = 0;
 
 void SteerManager::setup() {
 
+    FrontLight::setupFLight();
+
     #if enableBluetooth
         Monitor::setupBluetooth(); //activates Bluetoothcommunication #BLUETOOTH
         //Serial.println("Bluetooth!!!");
         //Monitor::sendMessage("SteerManager active:");
     #endif
-
     //calibrate();
     
 }
@@ -47,6 +52,8 @@ void SteerManager::loop() {
     turn = RemoteControlRobot::getTurn();
     speed = RemoteControlRobot::getSpeed();
     automaticMode = RemoteControlRobot::getAutomaticMode();
+
+    FrontLight::shine(250, Mode::ON); //Test Lights
 
     if(automaticMode == true) {             //Fahrmodus überprüfen
         // if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
