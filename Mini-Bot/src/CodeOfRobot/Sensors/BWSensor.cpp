@@ -7,6 +7,7 @@ BWSensor::BWSensor(String name, BWSensorType type, Accuracy accuracy) : name(nam
 }
 
 BWSensor::BWSensor(String name, BWSensorType type, int pin_led, Accuracy accuracy) : name(name), type(type), pin_led(pin_led), accuracy(accuracy) {
+    pinMode(pin_led, OUTPUT);
 }
 
 
@@ -23,10 +24,6 @@ int BWSensor::getRawValue() const {
     int _value = analogRead(type);
     // Serial.print(pin_led); Serial.print(": "); Serial.println(_value);
     return _value; 
-}
-
-int BWSensor::getMidValue() const {
-    return midValue;
 }
 
 bool BWSensor::isOnLine() const { 

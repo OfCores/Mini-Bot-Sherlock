@@ -9,7 +9,7 @@ BWSensor SteerManager::BWMiddle = BWSensor("SMitte", BWSensor::BWSensorType::SM,
 BWSensor SteerManager::BWRight = BWSensor("SRechts", BWSensor::BWSensorType::SR, 18);
 
 // set to true to activate Bluetooth
-#define enableBluetooth true
+#define enableBluetooth false
 
 //Variablen für den Status der Sensoren
 boolean sL = true;
@@ -17,10 +17,10 @@ boolean sM = true;
 boolean sR = true;
 
 //Defines für das Einlenken
-#define HARD_TURN_PERCENTAGE 10
-#define TURN_MEDIUM 70
+#define HARD_TURN_PERCENTAEG 30
+#define TURN_MEDIUM 30
 #define TURN_RADICAL 0
-#define MAX_SPEED 100
+#define MAX_SPEED 60
 
 //sonstige Variablen
 short SteerManager::speed;
@@ -33,8 +33,11 @@ int automaticModeLedSwitch = 0;
 
 void SteerManager::setup() {
 
-    FrontLight::setupFLight();
-
+    // FrontLight::setupFLight();
+    /* BWLeft.setLed(255);
+    BWMiddle.setLed(255);
+    BWRight.setLed(255);
+ */
     #if enableBluetooth
         Monitor::setupBluetooth(); //activates Bluetoothcommunication #BLUETOOTH
         //Serial.println("Bluetooth!!!");
@@ -51,7 +54,7 @@ void SteerManager::loop() {
     speed = RemoteControlRobot::getSpeed();
     automaticMode = RemoteControlRobot::getAutomaticMode();
 
-    FrontLight::shine(250, Mode::ON); //Test Lights
+    // FrontLight::shine(250, Mode::ON); //Test Lights
 
     if(automaticMode == true) {             //Fahrmodus überprüfen
         // if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
@@ -60,7 +63,7 @@ void SteerManager::loop() {
         sL = BWLeft.isOnLine();
         sM = BWMiddle.isOnLine();
         sR = BWRight.isOnLine();
-        
+
         #if enableBluetooth
         //Serial.println("Bluetooth is in loop!");
         //if(Monitor::getMessage() == "BWRaw"){  //checks input Mode #BLUETOOTH
@@ -121,10 +124,7 @@ void SteerManager::loop() {
                 MotorControl::driveRight(MAX_SPEED);
                 MotorControl::driveLeft(_turn);
             }
-        } */
-        
-
-
+        }*/
     } else {
         BWRight.setLed(0); 
         BWLeft.setLed(0);
@@ -147,20 +147,22 @@ bool SteerManager::calibrate(){ //this is not a very innovative function --> a b
     // UI: sign to put Sherlock on line --> TODO: Something that makes sure that Sherlock is corectly placed on line (e.g. a button input)
     MotorControl::stop();
     vTaskDelay(3000/portTICK_PERIOD_MS);
+    BWMiddle.setLed(255);
 
     BWLeft.calibrateMin();
     BWRight.calibrateMin();
     BWMiddle.calibrateMin();
 
     MotorControl::driveForward(100);
-    vTaskDelay(400/portTICK_PERIOD_MS);
+    vTaskDelay(200/portTICK_PERIOD_MS);
     MotorControl::stop();
     vTaskDelay(1000/portTICK_PERIOD_MS);
 
     BWLeft.calibrateMax();
     BWRight.calibrateMax();
     BWMiddle.calibrateMax();
-
+    vTaskDelay(2000/portTICK_PERIOD_MS);
+    BWMiddle.setLed(0);
     return true;
    /*  while(BWMiddle.getValue() >= (blackMid - 50) && BWMiddle.getValue() <= (blackMid +50)){ //while sensor !left black line
         MotorControl::driveRight(50);

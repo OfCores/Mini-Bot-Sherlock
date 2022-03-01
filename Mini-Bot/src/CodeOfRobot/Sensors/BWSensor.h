@@ -23,7 +23,6 @@ public:
     
     int getMidValue() const {return this ->midValue;} //return calibration values
     int getRawValue() const; //returns RAW value of a spez sensor
-    int getMidValue() const;
     String getName();
 
     void calibrateMin();

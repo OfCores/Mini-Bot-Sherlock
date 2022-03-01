@@ -1,8 +1,8 @@
 #include "MotorControl.h"
 
-#define lowestExecutableVoltage 100
+#define lowestExecutableVoltage 0
 
-int totalSpeed;
+int totalSpeed = 100;
 
 void MotorControl::setup() {
     pinMode(PIN_LEFT_MOTOR_F, OUTPUT);
