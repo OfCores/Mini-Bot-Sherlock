@@ -9,16 +9,19 @@ void ManagerRobot::setup() {
   SteerManager::setup();
   MotorControl::setup();
 
+  SteerManager::calibrate();
   // SteerManager::calibrate();
   // xTaskCreate(loop2, "Loop2", 2048, NULL, 0, NULL);
 }
 
 void ManagerRobot::loop() {
   SteerManager::loop();
-  if(digitalRead(23) == HIGH) {
-    SteerManager::calibrate();
-  }
-  vTaskDelay(STEERING_LOOP_LENGTH/portTICK_PERIOD_MS);
+  
+  //if(digitalRead(23) == HIGH) {
+  //  SteerManager::calibrate();
+  //}
+  delay(50);
+   // vTaskDelay(STEERING_LOOP_LENGTH/portTICK_PERIOD_MS);
 }
 
 /* void ManagerRobot::loop2(void* parm) { //2. Loop die die Verbindung zur 

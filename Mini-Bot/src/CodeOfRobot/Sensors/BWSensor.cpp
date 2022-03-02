@@ -2,15 +2,14 @@
 
 bool BWSensor::isLineColorBlack = true;
 
-BWSensor::BWSensor(String name, BWSensorType type, Accuracy accuracy) : name(name), type(type), accuracy(accuracy) {
-
+BWSensor::BWSensor(String name, BWSensorType type, Accuracy accuracy) 
+: name(name), type(type), accuracy(accuracy) {
 }
 
-BWSensor::BWSensor(String name, BWSensorType type, int pin_led, Accuracy accuracy) : name(name), type(type), pin_led(pin_led), accuracy(accuracy) {
+BWSensor::BWSensor(String name, BWSensorType type, int pin_led, Accuracy accuracy) 
+: name(name), type(type), pin_led(pin_led), accuracy(accuracy) {
     pinMode(pin_led, OUTPUT);
 }
-
-
 
 int BWSensor::getValue()const {
     int storage = 0;
@@ -21,9 +20,7 @@ int BWSensor::getValue()const {
 }
 
 int BWSensor::getRawValue() const { 
-    int _value = analogRead(type);
-    // Serial.print(pin_led); Serial.print(": "); Serial.println(_value);
-    return _value; 
+    return analogRead(type);
 }
 
 bool BWSensor::isOnLine() const { 
@@ -35,18 +32,13 @@ bool BWSensor::isOnLine() const {
         _b = _value < midValue;
     }
     
-    if(_b == true) {
-        ((BWSensor*)this)->setLed(255);
-    } else {
-        ((BWSensor*)this)->setLed(0);
-    }
-    
-    // Serial.print(((BWSensor*)this)->pin_led); Serial.print(": "); Serial.println(_value);
+    setLed( _b ? 255 : 0);
+
     return _b;
 }
 
-void BWSensor::setLed(int _dim) {
-    analogWrite(pin_led, _dim);
+void BWSensor::setLed(int dim) const {
+    analogWrite(pin_led, dim);
     // Serial.print("LED "); Serial.println(_dim);
 }
 

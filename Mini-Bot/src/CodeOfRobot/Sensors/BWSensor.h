@@ -8,10 +8,10 @@ class BWSensor
 {
 public:
     enum BWSensorType : int {SL= PIN_SL,SM = PIN_SM,SR = PIN_SR};  // Enumeration for BlackWhiteSensors SL = SenorLeft; SM = SensorMiddle; SR = SensorRight
-    enum Accuracy : int {VeryLow = 10, Low = 50, Medium = 100, High = 500, VeryHigh = 10000};
+    enum Accuracy : int {VeryLow = 1, Low = 50, Medium = 100, High = 500, VeryHigh = 10000};
 
-    BWSensor(String name, BWSensorType type, Accuracy accuracy = Medium);
-    BWSensor(String name, BWSensorType type, int pin_led, Accuracy accuracy = Medium);
+    BWSensor(String name, BWSensorType type, Accuracy accuracy = VeryLow);
+    BWSensor(String name, BWSensorType type, int pin_led, Accuracy accuracy = VeryLow);
 
     bool isOnLine() const; //returns value of Sensor; if on line return true if! return false
     int getValue() const; //returns value of the three sensors
@@ -19,7 +19,7 @@ public:
     Accuracy getAccuracy() const {return accuracy;}
     void setAccuracy(Accuracy accuracy) {this->accuracy = accuracy;}
 
-    void setMidValue(int mid) {this->midValue = mid;} //How?
+    void setMidValue(int mid) {this->midValue = mid;}
     
     int getMidValue() const {return this ->midValue;} //return calibration values
     int getRawValue() const; //returns RAW value of a spez sensor
@@ -28,7 +28,7 @@ public:
     void calibrateMin();
     void calibrateMax();
     
-    void setLed(int dim);
+    void setLed(int dim) const;
 
     static bool isLineColorBlack;
 
