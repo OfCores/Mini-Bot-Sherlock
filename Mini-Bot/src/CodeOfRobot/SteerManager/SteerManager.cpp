@@ -54,8 +54,9 @@ void SteerManager::loop() {
     speed = RemoteControlRobot::getSpeed();
     automaticMode = RemoteControlRobot::getAutomaticMode();
 
-    /* MotorControl::driveForward(100);
-    return; */
+    MotorControl::driveForward(100);
+    MotorControl::driveForward(-100);
+    return; 
     // FrontLight::shine(250, Mode::ON); //Test Lights
 
     if(automaticMode == true) {             //Fahrmodus überprüfen

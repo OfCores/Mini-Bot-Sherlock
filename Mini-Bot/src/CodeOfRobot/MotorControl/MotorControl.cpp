@@ -10,27 +10,9 @@ void MotorControl::setup() {
     pinMode(PIN_RIGHT_MOTOR_F, OUTPUT);
     pinMode(PIN_RIGHT_MOTOR_B, OUTPUT);
 
-    pinMode(PIN_RIGHT_GENERAL, OUTPUT);
+    //speed control Pins
+    pinMode(PIN_RIGHT_GENERAL, OUTPUT); 
     pinMode(PIN_LEFT_GENERAL, OUTPUT);
-
-
-    pinMode(PIN_RIGHT_MOTOR_B, OUTPUT);
-    digitalWrite(PIN_LEFT_MOTOR_B, HIGH);
-    digitalWrite(PIN_LEFT_MOTOR_F, LOW);
-    digitalWrite(PIN_LEFT_MOTOR_B, HIGH);
-    analogWrite(PIN_LEFT_GENERAL, 255);
-
-    digitalWrite(PIN_RIGHT_MOTOR_F, LOW);
-    digitalWrite(PIN_RIGHT_MOTOR_B, HIGH);
-    analogWrite(PIN_RIGHT_GENERAL, 255);
-
-    delay(1000);
-    driveForward(100);
-    delay(1000);
-    driveForward(-70);
-    delay(1000);
-    driveForward(100);
-    delay(1000);
 }
 
 void MotorControl::loop() {
@@ -98,15 +80,14 @@ void MotorControl::driveForward(double speed) {
         digitalWrite(PIN_LEFT_MOTOR_B, LOW);
         analogWrite(PIN_LEFT_GENERAL, speed);
         analogWrite(PIN_RIGHT_GENERAL, speed);
-        delay(10000);
     } 
 }
 
 void MotorControl::stop() {
-    analogWrite(PIN_RIGHT_MOTOR_F, 0);
-    analogWrite(PIN_LEFT_MOTOR_F, 0);
-    analogWrite(PIN_RIGHT_MOTOR_B, 0);
-    analogWrite(PIN_LEFT_MOTOR_B, 0);
+    digitalWrite(PIN_RIGHT_MOTOR_F, 0);
+    digitalWrite(PIN_LEFT_MOTOR_F, 0);
+    digitalWrite(PIN_RIGHT_MOTOR_B, 0);
+    digitalWrite(PIN_LEFT_MOTOR_B, 0);
     analogWrite(PIN_LEFT_GENERAL, 0);
     analogWrite(PIN_RIGHT_GENERAL, 0);
 }

@@ -14,6 +14,8 @@
 
 #define FLight 0
 
+#define PIN_CALIBRATION 23
+
 #define PIN_LEFT_MOTOR_F 26 //rot
 #define PIN_LEFT_MOTOR_B 27 //gelb
 #define PIN_LEFT_GENERAL 4

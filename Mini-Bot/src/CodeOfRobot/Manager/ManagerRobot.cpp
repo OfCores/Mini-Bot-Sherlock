@@ -4,7 +4,7 @@
 
 void ManagerRobot::setup() {
   Serial.println("------ Robot -------");
-  pinMode(23, INPUT);
+  pinMode(PIN_CALIBRATION, INPUT);
   RemoteControlRobot::setup();
   SteerManager::setup();
   MotorControl::setup();
