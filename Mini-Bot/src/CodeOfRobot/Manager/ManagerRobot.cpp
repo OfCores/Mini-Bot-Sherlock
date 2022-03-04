@@ -1,6 +1,6 @@
 #include "ManagerRobot.h"
 
-#define STEERING_LOOP_LENGTH 1000
+#define STEERING_LOOP_LENGTH 50
 
 void ManagerRobot::setup() {
   Serial.println("------ Robot -------");
@@ -10,7 +10,6 @@ void ManagerRobot::setup() {
   MotorControl::setup();
 
   SteerManager::calibrate();
-  // SteerManager::calibrate();
   // xTaskCreate(loop2, "Loop2", 2048, NULL, 0, NULL);
 }
 
@@ -20,8 +19,8 @@ void ManagerRobot::loop() {
   //if(digitalRead(23) == HIGH) {
   //  SteerManager::calibrate();
   //}
-  delay(50);
-   // vTaskDelay(STEERING_LOOP_LENGTH/portTICK_PERIOD_MS);
+
+  vTaskDelay(STEERING_LOOP_LENGTH/portTICK_PERIOD_MS);
 }
 
 /* void ManagerRobot::loop2(void* parm) { //2. Loop die die Verbindung zur 

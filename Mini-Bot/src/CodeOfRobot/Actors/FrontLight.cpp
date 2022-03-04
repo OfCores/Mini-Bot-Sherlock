@@ -4,17 +4,14 @@
 
 
 void FrontLight::setupFLight(){
-    pinMode(FLight,OUTPUT);
-    shine(1000,Mode::ON);
-    vTaskDelay(1000);
-    shine(0,Mode::OFF);
+    pinMode(FLight, OUTPUT);
 }
 
-void FrontLight::shine(int intense, Mode mode){
+void FrontLight::shine(Mode mode){
     if(mode == Mode::ON){
-        analogWrite(FLight, intense);
+        digitalWrite(FLight, HIGH);
     }
     if(mode == Mode::OFF){
-        analogWrite(FLight,0);
+        digitalWrite(FLight, LOW);
     }
 }

@@ -4,7 +4,7 @@
 #include "Arduino.h"
 #include <../src/CodeOfRobot/Util/Util.h>
 
-enum Mode : int {ON, SOS, FLASHING_QUICK, FLASHING_SLOW, OFF}; //comming soon
+enum Mode : int {ON, OFF}; //more comming soon
 
 
 class FrontLight
@@ -14,7 +14,7 @@ private:
    
 public:
     static void setupFLight();
-    static void shine(int intensity, Mode mode);
+    static void shine(Mode mode);
 };
 
 #endif

@@ -1,20 +1,21 @@
 #include "SteerManager.h"
 #include "../sensors/BWSensor.h"
 
-BWSensor SteerManager::BWLeft = BWSensor("SLinks", BWSensor::BWSensorType::SL, 21);
-BWSensor SteerManager::BWMiddle = BWSensor("SMitte", BWSensor::BWSensorType::SM, 19);
-BWSensor SteerManager::BWRight = BWSensor("SRechts", BWSensor::BWSensorType::SR, 18);
-
-//Variablen für den Status der Sensoren
-boolean sL = true;
-boolean sM = true;
-boolean sR = true;
+#include "../Actors/FrontLight.h"
+#include "../Sensors/LDR.h"
 
 //Defines für das Einlenken
 #define HARD_TURN_PERCENTAEG 50
 #define TURN_MEDIUM 30
 #define TURN_RADICAL 0
-#define MAX_SPEED 60
+#define MAX_SPEED 100
+
+BWSensor SteerManager::BWLeft = BWSensor("SLinks", BWSensor::BWSensorType::SL, PIN_LED_SL);
+BWSensor SteerManager::BWMiddle = BWSensor("SMitte", BWSensor::BWSensorType::SM, PIN_LED_SM);
+BWSensor SteerManager::BWRight = BWSensor("SRechts", BWSensor::BWSensorType::SR, PIN_LED_SR);
+
+LDR ldr_R= LDR(LDR_POS::LDRRight);
+
 
 //sonstige Variablen
 short SteerManager::speed;
@@ -26,7 +27,7 @@ short SteerManager::lastState;
 int automaticModeLedSwitch = 0;
 
 void SteerManager::setup() {
-    
+    FrontLight::setupFLight();
 }
 
 void SteerManager::loop() {
@@ -35,13 +36,21 @@ void SteerManager::loop() {
     turn = 50;
     speed = 50;
     automaticMode = 1;
+    
+    //Serial.println(ldr_R.getRawValue());
 
-    if(automaticMode == true) {             //Fahrmodus überprüfen
+    if(ldr_R.getValue() < 1200){
+        FrontLight::shine(Mode::OFF);
+    }else{
+        Serial.println(ldr_R.getRawValue());
+        FrontLight::shine(Mode::ON);
+    }
+
+    if(automaticMode) {             //Fahrmodus überprüfen
         // if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
-    	
-        sL = BWLeft.isOnLine();
-        sM = BWMiddle.isOnLine();
-        sR = BWRight.isOnLine();
+        boolean sL = BWLeft.isOnLine();
+        boolean sM = BWMiddle.isOnLine();
+        boolean sR = BWRight.isOnLine();
         
        // Serial.print(sL); Serial.print("|"); Serial.print(sM); Serial.print("|"); Serial.println(sR);
        // Serial.print(BWLeft.getRawValue()); Serial.print("|"); Serial.print(BWMiddle.getRawValue()); Serial.print("|"); Serial.println(BWRight.getRawValue());
@@ -68,7 +77,7 @@ void SteerManager::loop() {
             //MotorControl::driveLeft(-1 * TURN_MEDIUM);
             lastState = 1;
         }
-        else if( !sL && sM && !sR){ //Mitte
+        else if( !sL && sM && !sR) { //Mitte
             MotorControl::driveForward(speed);
         }
     } /*else {
@@ -108,6 +117,11 @@ bool SteerManager::calibrate(){ //this is not a very innovative function --> a b
     BWRight.calibrateMax();
     BWMiddle.calibrateMax();
     vTaskDelay(2000/portTICK_PERIOD_MS);
+
+    BWLeft.calibrate();
+    BWRight.calibrate();
+    BWMiddle.calibrate();
+
     BWMiddle.setLed(0);
     return true;
    /*  while(BWMiddle.getValue() >= (blackMid - 50) && BWMiddle.getValue() <= (blackMid +50)){ //while sensor !left black line

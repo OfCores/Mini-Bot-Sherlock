@@ -1,12 +1,7 @@
 #include "BWSensor.h"
 
-bool BWSensor::isLineColorBlack = true;
 
-BWSensor::BWSensor(String name, BWSensorType type, Accuracy accuracy) 
-: name(name), type(type), accuracy(accuracy) {
-}
-
-BWSensor::BWSensor(String name, BWSensorType type, int pin_led, Accuracy accuracy) 
+BWSensor::BWSensor(const String & name, BWSensorType type, int pin_led, Accuracy accuracy) 
 : name(name), type(type), pin_led(pin_led), accuracy(accuracy) {
     pinMode(pin_led, OUTPUT);
 }
@@ -39,7 +34,6 @@ bool BWSensor::isOnLine() const {
 
 void BWSensor::setLed(int dim) const {
     analogWrite(pin_led, dim);
-    // Serial.print("LED "); Serial.println(_dim);
 }
 
 void BWSensor::calibrateMax() {
@@ -49,15 +43,9 @@ void BWSensor::calibrateMax() {
         vTaskDelay(50/portTICK_RATE_MS);
     }
     average = average / 50.;
-    Serial.print(name); Serial.print(": Max kalibriert auf: "); Serial.println(average);
     maxValue = average;
 
-    Serial.print(name); Serial.print(": Differenz bestimmt auf: "); Serial.println(minValue - maxValue);
-    midValue = (maxValue + minValue) / 2.;
-    Serial.print(name); Serial.print(": Mittelwert bestimmt auf: "); Serial.println(midValue);
-
-    if(minValue > maxValue) {BWSensor::isLineColorBlack = true;} else {BWSensor::isLineColorBlack = false;}
-    Serial.print("IsColorLineBlack? : "); Serial.println(BWSensor::isLineColorBlack);
+    Serial.println(name + ": Max kalibriert auf: " + (String) maxValue); 
 }
 
 void BWSensor::calibrateMin() {
@@ -67,8 +55,17 @@ void BWSensor::calibrateMin() {
         vTaskDelay(50/portTICK_RATE_MS);
     }
     average = average / 50.;
-    Serial.print(name); Serial.print(": Min kalibriert auf: "); Serial.println(average);
     minValue = average;
+
+    Serial.println(name + ": Min kalibriert auf: " + (String) minValue);
 }
 
- 
+void BWSensor::calibrate() {
+    midValue = (maxValue + minValue) / 2.;
+    Serial.println(name + ": Mittelwert bestimmt auf: " + (String) midValue);
+
+    isLineColorBlack = minValue > maxValue;
+    Serial.println(name + ": IsColorLineBlack? : " + (String) isLineColorBlack); 
+}
+
+

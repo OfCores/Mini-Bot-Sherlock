@@ -1,5 +1,7 @@
 #include "Manager.h"
 
+#include "../Input/Button.h"
+
 #define POTI_PIN 35
 
 void Manager::setup() {
@@ -10,8 +12,9 @@ void Manager::setup() {
 
 void Manager::loop() {
     // RemoteControl::loop();
-    RemoteControl::sendData(JoyStick::getJoyStickSpeed(), JoyStick::getJoyStickTurn(), RemoteControl::getAutomaticMode());
-    JoyStick::manageButton();
+    //RemoteControl::sendData(JoyStick::getJoyStickSpeed(), JoyStick::getJoyStickTurn(), RemoteControl::getAutomaticMode());
+    //JoyStick::manageButton();
+    Serial.println(Button::isButtonRight());
     delay(100);
 }
 

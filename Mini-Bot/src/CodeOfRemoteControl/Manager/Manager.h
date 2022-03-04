@@ -4,6 +4,7 @@
 #include "../Util/Util.h"
 #include "../RmtCntrlSndr/RmtCntrlSndr.h"
 #include "../JoyStick/JoyStick.h"
+#include <Arduino.h>
 
 class Manager
 {
