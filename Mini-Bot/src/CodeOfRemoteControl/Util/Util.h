@@ -8,5 +8,5 @@
 
 #define BUTTON_PIN 25 //not pluged in
 
-#define JOY_STICK_PIN_X 33
-#define JOY_STICK_PIN_Y 26
+#define JOY_STICK_PIN_X 33 //up
+#define JOY_STICK_PIN_Y 34  //side

@@ -3,13 +3,13 @@
 void Button::setup(){
     //pinMode(PIN_BUTTON_DOWN,INPUT);
     pinMode(PIN_BUTTON_RIGHT, INPUT_PULLUP);
-    pinMode(PIN_BUTTON_DOWN, INPUT);
-    pinMode(PIN_BUTTON_LEFT, INPUT);
-    pinMode(PIN_BUTTON_TRIGER, INPUT);
+    pinMode(PIN_BUTTON_DOWN, INPUT_PULLUP);
+    pinMode(PIN_BUTTON_LEFT, INPUT_PULLUP);
+    pinMode(PIN_BUTTON_TRIGER, INPUT_PULLUP);
 }
 
 bool Button::isButtonRight(){
-    return !digitalRead(PIN_BUTTON_RIGHT);
+    return digitalRead(PIN_BUTTON_RIGHT);
 }
 
 bool Button::isButtonLeft(){
