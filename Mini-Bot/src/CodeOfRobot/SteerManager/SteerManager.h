@@ -16,6 +16,9 @@ private:
     static short lastTurn;
     static boolean automaticMode;
     static short lastState;
+    static boolean frontLightOn;
+    static boolean startShooting;
+    static boolean stop;
     
     static BWSensor BWLeft;
     static BWSensor BWMiddle;

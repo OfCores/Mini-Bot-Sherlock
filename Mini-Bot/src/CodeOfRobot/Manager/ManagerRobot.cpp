@@ -1,10 +1,10 @@
 #include "ManagerRobot.h"
 
-#define STEERING_LOOP_LENGTH 50
+#define STEERING_LOOP_LENGTH 1000
 
 void ManagerRobot::setup() {
   Serial.println("------ Robot -------");
-  pinMode(PIN_CALIBRATION, INPUT);
+  //pinMode(PIN_CALIBRATION, INPUT);
   RemoteControlRobot::setup();
   SteerManager::setup();
   MotorControl::setup();

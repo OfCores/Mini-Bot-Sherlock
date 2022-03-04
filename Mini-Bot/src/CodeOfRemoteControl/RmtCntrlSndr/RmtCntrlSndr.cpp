@@ -8,6 +8,9 @@ typedef struct RemoteControl::struct_message {
     short speed;
     short turn;
     boolean automaticMode;
+    boolean frontLightOn;
+    boolean startShooting; 
+    boolean stop;
 } struct_message;
 
 struct_message myData;
@@ -38,12 +41,12 @@ void RemoteControl::setup() {
   myData.automaticMode = true;
   myData.speed = 0;
   myData.turn = 0;
+  myData.frontLightOn = false;
+  myData.startShooting = false;
+  myData.stop = false;
 }
  
-void RemoteControl::loop() {
-}
-
-void RemoteControl::sendData(short speed, short turn, boolean automaticMode) {
+void RemoteControl::sendData(short speed, short turn, boolean automaticMode, boolean frontLightOn, boolean startShooting, boolean stop) {
   if (slave.channel == CHANNEL) { // check if slave channel is defined
     // `slave` is defined
     // Add slave as peer if it has not been added already
@@ -54,8 +57,11 @@ void RemoteControl::sendData(short speed, short turn, boolean automaticMode) {
       myData.speed = speed;
       myData.turn = turn;
       myData.automaticMode = automaticMode;
+      myData.frontLightOn = frontLightOn;
+      myData.startShooting = startShooting;
+      myData.stop = stop;
       Serial.println();
-      Serial.print("Speed: "); Serial.print(speed); Serial.print("turn: "); Serial.println(turn);
+      //Serial.print("Speed: "); Serial.print(speed); Serial.print("turn: "); Serial.println(turn);
 
       esp_err_t result = esp_now_send(peer_addr, (uint8_t *) &myData, sizeof(myData));
       
@@ -143,9 +149,9 @@ bool RemoteControl::manageSlave() {
     // Serial.print("Slave Status: ");
     // check if the peer exists
     bool exists = esp_now_is_peer_exist(slave.peer_addr);
-    if ( exists) {
+    if (exists) {
       // Slave already paired.
-      // Serial.println("Already Paired");
+       Serial.println("Already Paired");
       return true;
     } else {
       // Slave not paired, attempt pair
@@ -184,4 +190,10 @@ void RemoteControl::setAutomaticMode(boolean _a) {
 
 boolean RemoteControl::getAutomaticMode() {
   return myData.automaticMode;
+}
+boolean RemoteControl::getLight(){
+  return myData.frontLightOn;
+}
+boolean RemoteControl::getStop(){
+  return myData.stop;
 }

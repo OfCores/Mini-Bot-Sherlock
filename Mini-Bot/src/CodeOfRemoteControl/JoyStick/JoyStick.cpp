@@ -25,29 +25,17 @@ void JoyStick::setup() {
 }
 
 //JoyStick Methoden
-//Button des JoySticks um den Fahrmodus zu ändern
-void JoyStick::manageButton() {
-    int result = Button::isButtonDown();
-    if(result == HIGH) { //Think again!
-        switch(RemoteControl::getAutomaticMode()) {
-            case true: RemoteControl::setAutomaticMode(false); break;
-            case false: RemoteControl::setAutomaticMode(true); break;
-        }
-        //Serial.print("AutomaticMode: "); Serial.println(RemoteControl::getAutomaticMode());
-        delay(200);
-    }
-}
 
 int JoyStick::getJoyStickTurn() {
     int _x = analogRead(JOY_STICK_PIN_X);
     if(_x < joyStickInitialX - JOY_STICK_NAV_TOLERANCE) {
         _x = map(_x, 0, joyStickInitialX - JOY_STICK_NAV_TOLERANCE, -100, -MOTOR_LOWEST_PERCENTAGE);
-        Serial.println(_x);
+        //Serial.println(_x);
         return _x;
     }
     if(_x > joyStickInitialX + JOY_STICK_NAV_TOLERANCE) {
         _x = map(_x, joyStickInitialX + JOY_STICK_NAV_TOLERANCE, 4095, MOTOR_LOWEST_PERCENTAGE, 100);
-        Serial.println(_x);
+        //Serial.println(_x);
 
         return _x;
     }
@@ -58,13 +46,13 @@ int JoyStick::getJoyStickSpeed() {
     int _speed = analogRead(JOY_STICK_PIN_Y);
     if(_speed < joyStickInitialY - JOY_STICK_NAV_TOLERANCE) {
         _speed = map(_speed, 0, joyStickInitialY - JOY_STICK_NAV_TOLERANCE, -100, -MOTOR_LOWEST_PERCENTAGE);
-                Serial.println(_speed);
+                //Serial.println(_speed);
 
         return _speed;
     }
     if(_speed > joyStickInitialY + JOY_STICK_NAV_TOLERANCE) {
         _speed = map(_speed, joyStickInitialY + JOY_STICK_NAV_TOLERANCE, 4095, MOTOR_LOWEST_PERCENTAGE, 100);
-                Serial.println(_speed);
+                //Serial.println(_speed);
 
         return _speed;
     }

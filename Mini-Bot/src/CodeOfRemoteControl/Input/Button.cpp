@@ -1,23 +1,29 @@
 #include "Button.h"
 
-void Button::setup(){
-    //pinMode(PIN_BUTTON_DOWN,INPUT);
-    pinMode(PIN_BUTTON_RIGHT, INPUT_PULLUP);
-    pinMode(PIN_BUTTON_DOWN, INPUT_PULLUP);
-    pinMode(PIN_BUTTON_LEFT, INPUT_PULLUP);
-    pinMode(PIN_BUTTON_TRIGER, INPUT_PULLUP);
+Button::Button(BUTTON_TYPE button, int cooldownMS):
+ bType (button), cooldown (cooldownMS) 
+ {}
+
+void Button::setupButton(){
+    pinMode(bType, INPUT_PULLUP);
+    buttonState = false;
 }
 
-bool Button::isButtonRight(){
-    return digitalRead(PIN_BUTTON_RIGHT);
-}
-
-bool Button::isButtonLeft(){
-    return digitalRead(PIN_BUTTON_LEFT);
-}
-bool Button::isButtonDown(){
-    return digitalRead(PIN_BUTTON_DOWN);
-}
 bool Button::isTrigered(){
-    return digitalRead(PIN_BUTTON_TRIGER);
+    return !digitalRead(bType); //invertes signal
+}
+
+bool Button::hasChanged(){
+     cache = millis();
+     if(isTrigered()){ 
+        if(millis() >= (cache + cooldown)){
+            switch(buttonState) {
+                case true: buttonState = false; return buttonState;break;
+                case false: buttonState = true; return buttonState; break;
+            }
+        }
+    }else{
+        return buttonState;
+    }
+    Serial.println("Buttonstate:  " + (String) buttonState);
 }

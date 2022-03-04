@@ -7,10 +7,9 @@
 class JoyStick
 {
 private:
-    /* data */
+
 public:
     static void setup();
-    static void loop();
     static int getJoyStickTurn();
     static int getJoyStickSpeed();
     static void manageButton();

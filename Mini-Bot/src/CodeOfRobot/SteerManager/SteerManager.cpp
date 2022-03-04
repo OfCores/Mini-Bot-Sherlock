@@ -6,7 +6,7 @@
 
 //Defines für das Einlenken
 #define HARD_TURN_PERCENTAEG 50
-#define TURN_MEDIUM 30
+#define TURN_MEDIUM 20
 #define TURN_RADICAL 0
 #define MAX_SPEED 100
 
@@ -23,6 +23,9 @@ short SteerManager::turn;
 short SteerManager::lastTurn;
 boolean SteerManager::automaticMode;
 short SteerManager::lastState;
+boolean SteerManager::frontLightOn;
+boolean SteerManager::startShooting;
+boolean SteerManager::stop;
 
 int automaticModeLedSwitch = 0;
 
@@ -33,19 +36,26 @@ void SteerManager::setup() {
 void SteerManager::loop() {
     //aktuelle Werte von der Fernbedienung übernehmen
     lastTurn = turn;
-    turn = 50;
-    speed = 50;
-    automaticMode = 1;
-    
-    //Serial.println(ldr_R.getRawValue());
+    turn = RemoteControlRobot::getTurn();
+    speed = RemoteControlRobot::getSpeed();
+    automaticMode = RemoteControlRobot::getAutomaticMode();
+    frontLightOn = RemoteControlRobot::getFrontLightOn();
+    startShooting = RemoteControlRobot::getStartShooting(); //not mounted for now
+    stop = RemoteControlRobot::getStop();
 
-    if(ldr_R.getValue() < 1200){
-        FrontLight::shine(Mode::OFF);
+    if(stop) MotorControl::stop(); //just the Engines for now
+
+    if(frontLightOn) { //manage Light
+            FrontLight::shine(Mode::ON);
     }else{
-        Serial.println(ldr_R.getRawValue());
-        FrontLight::shine(Mode::ON);
+        if(ldr_R.getValue() < 1200){
+            FrontLight::shine(Mode::OFF);
+        }else{
+            Serial.println(ldr_R.getRawValue());
+            FrontLight::shine(Mode::ON);
+        }
     }
-
+    
     if(automaticMode) {             //Fahrmodus überprüfen
         // if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
         boolean sL = BWLeft.isOnLine();
@@ -80,9 +90,12 @@ void SteerManager::loop() {
         else if( !sL && sM && !sR) { //Mitte
             MotorControl::driveForward(speed);
         }
-    } /*else {
+    } else {
         BWRight.setLed(0); 
         BWLeft.setLed(0);
+        BWMiddle.setLed(0);
+
+        /*
         if(turn < 0) { //Bot soll nach links fahren
             turn = turn * (-1);
             MotorControl::driveRight(MAX_SPEED);
@@ -93,21 +106,25 @@ void SteerManager::loop() {
             MotorControl::driveLeft(MAX_SPEED);     
             BWRight.setLed(255);     
         } 
-        BWMiddle.setLed((++automaticModeLedSwitch%2 == 0)?0:255); 
-    }*/
+        BWMiddle.setLed((++automaticModeLedSwitch%2 == 0)?0:255); */
+
+        
+    }
 }
 
 
 bool SteerManager::calibrate(){ //this is not a very innovative function --> a better one is coming soon
     // UI: sign to put Sherlock on line --> TODO: Something that makes sure that Sherlock is corectly placed on line (e.g. a button input)
     MotorControl::stop();
-    vTaskDelay(3000/portTICK_PERIOD_MS);
+    vTaskDelay(1000/portTICK_PERIOD_MS);
     BWMiddle.setLed(255);
 
     BWLeft.calibrateMin();
     BWRight.calibrateMin();
     BWMiddle.calibrateMin();
 
+    BWLeft.setLed(250);
+    BWRight.setLed(250);
     MotorControl::driveForward(100);
     vTaskDelay(200/portTICK_PERIOD_MS);
     MotorControl::stop();
@@ -116,13 +133,15 @@ bool SteerManager::calibrate(){ //this is not a very innovative function --> a b
     BWLeft.calibrateMax();
     BWRight.calibrateMax();
     BWMiddle.calibrateMax();
-    vTaskDelay(2000/portTICK_PERIOD_MS);
+    vTaskDelay(1000/portTICK_PERIOD_MS);
 
     BWLeft.calibrate();
     BWRight.calibrate();
     BWMiddle.calibrate();
 
     BWMiddle.setLed(0);
+    BWLeft.setLed(0);
+    BWRight.setLed(0);
     return true;
    /*  while(BWMiddle.getValue() >= (blackMid - 50) && BWMiddle.getValue() <= (blackMid +50)){ //while sensor !left black line
         MotorControl::driveRight(50);

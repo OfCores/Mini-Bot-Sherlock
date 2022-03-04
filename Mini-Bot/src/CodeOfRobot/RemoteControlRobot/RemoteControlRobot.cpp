@@ -9,6 +9,9 @@ typedef struct struct_message {
     short speed;
     short turn;
     boolean automaticMode;
+    boolean frontLightOn;
+    boolean startShooting;
+    boolean stop;
 } struct_message;
 
 struct_message myDataRobot;
@@ -25,6 +28,13 @@ void RemoteControlRobot::OnDataRecvRobot(const uint8_t * mac, const uint8_t *inc
   Serial.print("; Modus -> ");
   Serial.print(myDataRobot.automaticMode);
   Serial.println(";");
+  Serial.print(myDataRobot.frontLightOn);
+  Serial.println(";");
+  Serial.print(myDataRobot.startShooting);
+  Serial.println(";");
+  Serial.print(myDataRobot.stop);
+  Serial.println(";");
+
 }
  
 void RemoteControlRobot::setup() {
@@ -48,6 +58,9 @@ void RemoteControlRobot::setup() {
   myDataRobot.automaticMode = true;
   myDataRobot.speed = 100;
   myDataRobot.turn = 0;
+  myDataRobot.frontLightOn = false;
+  myDataRobot.startShooting = false;
+  myDataRobot.stop = false;
 }
  
 void RemoteControlRobot::loop() {}
@@ -71,4 +84,13 @@ short RemoteControlRobot::getTurn() {
 }
 boolean RemoteControlRobot::getAutomaticMode() {
     return myDataRobot.automaticMode;
+}
+boolean RemoteControlRobot::getFrontLightOn() {
+    return myDataRobot.frontLightOn;
+}
+boolean RemoteControlRobot::getStartShooting() {
+    return myDataRobot.startShooting;
+}
+boolean RemoteControlRobot::getStop() {
+    return myDataRobot.stop;
 }

@@ -6,15 +6,20 @@
 
 class Button {
 
-private:
-    /* data */
 public:
-    static void setup();
-    static bool isTrigered();
-    static bool isButtonLeft();
-    static bool isButtonRight();
-    static bool isButtonDown();
-    static bool isButtonUp();
+    enum BUTTON_TYPE : int {BL = PIN_BUTTON_LEFT, BD = PIN_BUTTON_DOWN, BRe = PIN_BUTTON_RIGHT, BT = PIN_BUTTON_TRIGER};
+
+    Button(BUTTON_TYPE button, int cooldownMS );
+     void setupButton();
+     bool isTrigered();
+     bool hasChanged();
+
+private:
+    BUTTON_TYPE bType;
+    int cooldown; 
+    int cache;
+    bool buttonState; 
+
 };
 
 #endif
