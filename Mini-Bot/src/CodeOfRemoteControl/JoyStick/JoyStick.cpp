@@ -1,15 +1,12 @@
 #include "JoyStick.h"
+#include "../Input/Button.h"
 
-
-
-
-#define JOY_STICK_NAV_TOLERANCE 30
-#define MOTOR_LOWEST_PERCENTAGE 30
+#define JOY_STICK_NAV_TOLERANCE 20
+#define MOTOR_LOWEST_PERCENTAGE 20
 
 int joyStickInitialX, joyStickInitialY;
 
 void JoyStick::setup() {
-    pinMode(BUTTON_PIN, INPUT_PULLUP);
 
     int average = 0;
     for(int x = 0; x <= 100; x++) {
@@ -30,15 +27,14 @@ void JoyStick::setup() {
 //JoyStick Methoden
 //Button des JoySticks um den Fahrmodus zu ändern
 void JoyStick::manageButton() {
-    int result = digitalRead(BUTTON_PIN);
-    //Serial.println(result);
-    if(result == LOW) {
+    int result = Button::isButtonDown();
+    if(result == HIGH) { //Think again!
         switch(RemoteControl::getAutomaticMode()) {
             case true: RemoteControl::setAutomaticMode(false); break;
             case false: RemoteControl::setAutomaticMode(true); break;
         }
-        Serial.print("AutomaticMode: "); Serial.println(RemoteControl::getAutomaticMode());
-        delay(500);
+        //Serial.print("AutomaticMode: "); Serial.println(RemoteControl::getAutomaticMode());
+        delay(200);
     }
 }
 

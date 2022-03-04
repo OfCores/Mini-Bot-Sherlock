@@ -27,9 +27,6 @@ void setup() {
 
 void loop() {
     Manager::loop();
-    //JoyStick::getJoyStickSpeed();
-    //JoyStick::getJoyStickTurn();
-    
 }
 
 #endif
