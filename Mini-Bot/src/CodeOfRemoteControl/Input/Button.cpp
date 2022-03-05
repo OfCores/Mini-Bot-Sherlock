@@ -17,9 +17,12 @@ bool Button::hasChanged(){
      cache = millis();
      if(isTrigered()){ 
         if(millis() >= (cache + cooldown)){
-            switch(buttonState) {
-                case true: buttonState = false; return buttonState;break;
-                case false: buttonState = true; return buttonState; break;
+            if(buttonState) {
+                buttonState = false;
+                return buttonState;
+            }else{
+               buttonState = true; 
+               return buttonState;
             }
         }
     }else{

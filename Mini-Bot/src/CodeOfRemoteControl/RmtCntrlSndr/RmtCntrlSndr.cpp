@@ -60,7 +60,8 @@ void RemoteControl::sendData(short speed, short turn, boolean automaticMode, boo
       myData.frontLightOn = frontLightOn;
       myData.startShooting = startShooting;
       myData.stop = stop;
-      Serial.println();
+
+      //Serial.println();
       //Serial.print("Speed: "); Serial.print(speed); Serial.print("turn: "); Serial.println(turn);
 
       esp_err_t result = esp_now_send(peer_addr, (uint8_t *) &myData, sizeof(myData));
@@ -151,7 +152,7 @@ bool RemoteControl::manageSlave() {
     bool exists = esp_now_is_peer_exist(slave.peer_addr);
     if (exists) {
       // Slave already paired.
-       Serial.println("Already Paired");
+       //Serial.println("Already Paired");
       return true;
     } else {
       // Slave not paired, attempt pair

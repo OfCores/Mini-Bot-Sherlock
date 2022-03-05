@@ -42,9 +42,13 @@ void SteerManager::loop() {
     frontLightOn = RemoteControlRobot::getFrontLightOn();
     startShooting = RemoteControlRobot::getStartShooting(); //not mounted for now
     stop = RemoteControlRobot::getStop();
+    //Serial.println("autoMode: " + automaticMode);
+    //Serial.println("frontLight: " + frontLightOn);
+    Serial.println("Joy X: " + turn);
+    //Serial.println()
 
-    if(stop) MotorControl::stop(); //just the Engines for now
-
+   // if(stop) MotorControl::stop(); //just the Engines for now
+    return;
     if(frontLightOn) { //manage Light
             FrontLight::shine(Mode::ON);
     }else{
@@ -91,9 +95,36 @@ void SteerManager::loop() {
             MotorControl::driveForward(speed);
         }
     } else {
+
         BWRight.setLed(0); 
         BWLeft.setLed(0);
         BWMiddle.setLed(0);
+
+        MotorControl::stop();
+        /*
+        if(turn > 0 && speed > 0){ //oberes quartiel
+            MotorControl::driveLeft(speed - (speed -turn));
+            MotorControl::driveRight(turn);
+        }
+        if(turn < 0 && speed > 0){ //oberes Quartiel rechts
+            MotorControl::driveRight(speed - (speed - (turn * (-1))));
+            MotorControl::driveLeft(speed); 
+        }
+        if(speed < 0 && turn < 0){ //unteres Quartiel links
+            MotorControl::driveRight(speed);
+            MotorControl::driveLeft(turn * (-1));
+        }
+        if(speed < 0 && turn > 0){ //unteres Quartiel rechts
+            MotorControl::driveLeft(speed);
+            MotorControl::driveRight(turn);
+        }
+        if(speed == 0 && turn == 0){
+            MotorControl::stop();
+        }
+        */
+
+
+
 
         /*
         if(turn < 0) { //Bot soll nach links fahren
@@ -107,8 +138,6 @@ void SteerManager::loop() {
             BWRight.setLed(255);     
         } 
         BWMiddle.setLed((++automaticModeLedSwitch%2 == 0)?0:255); */
-
-        
     }
 }
 
