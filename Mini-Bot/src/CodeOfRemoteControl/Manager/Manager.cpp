@@ -4,10 +4,10 @@
 
 #define POTI_PIN 35
 
-Button bStop = Button(Button::BUTTON_TYPE::BL, 500);
-Button bLight = Button(Button::BUTTON_TYPE::BRe, 500);
-Button bMode = Button(Button::BUTTON_TYPE::BD, 500);
-Button bTrigger = Button(Button::BUTTON_TYPE::BT, 1000);
+Button bStop = Button(Button::BUTTON_TYPE::BL);
+Button bLight = Button(Button::BUTTON_TYPE::BRe);
+Button bMode = Button(Button::BUTTON_TYPE::BD);
+Button bTrigger = Button(Button::BUTTON_TYPE::BT);
 
 
 
@@ -15,14 +15,14 @@ void Manager::setup() {
     Serial.println("------ Remote Control -------");
     RemoteControl::setup();
     JoyStick::setup();
-    bStop.setupButton();
-    bLight.setupButton();
-    bMode.setupButton();
-    bTrigger.setupButton();
 }   
 
 void Manager::loop() {
-    RemoteControl::sendData(JoyStick::getJoyStickSpeed(), JoyStick::getJoyStickTurn(), bMode.hasChanged(),bLight.hasChanged(), bTrigger.hasChanged(), bStop.hasChanged());
+    bStop.loop();
+    bLight.loop();
+    bMode.loop();
+    bTrigger.loop();
+    RemoteControl::sendData(JoyStick::getJoyStickSpeed(), JoyStick::getJoyStickTurn(), bMode.getState(),bLight.getState(), bTrigger.getState(), bStop.getState());
     //Serial.println("Speed:" + (String) JoyStick::getJoyStickSpeed() + "Turn: " + (String) JoyStick::getJoyStickTurn());
     delay(100);
 }

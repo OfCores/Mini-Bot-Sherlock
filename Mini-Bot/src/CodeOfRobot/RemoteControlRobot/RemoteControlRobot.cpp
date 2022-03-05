@@ -21,7 +21,7 @@ struct_message myDataRobot;
 // Funktion die ausgeführt wird wenn die Fernbedienung Werte schickt
 void RemoteControlRobot::OnDataRecvRobot(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&myDataRobot, incomingData, sizeof(myDataRobot));
- /* Serial.print("DATA RECEIVED: Speed -> ");
+ Serial.print("DATA RECEIVED: Speed -> ");
   Serial.print(myDataRobot.speed);
   Serial.print("; Turn -> ");
   Serial.print(myDataRobot.turn);
@@ -34,7 +34,7 @@ void RemoteControlRobot::OnDataRecvRobot(const uint8_t * mac, const uint8_t *inc
   Serial.println(";");
   Serial.print(myDataRobot.stop);
   Serial.println(";");
-*/
+
 }
  
 void RemoteControlRobot::setup() {

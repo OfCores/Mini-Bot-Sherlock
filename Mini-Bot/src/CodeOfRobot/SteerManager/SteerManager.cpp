@@ -16,40 +16,15 @@ BWSensor SteerManager::BWRight = BWSensor("SRechts", BWSensor::BWSensorType::SR,
 
 LDR ldr_R= LDR(LDR_POS::LDRRight);
 
-
-//sonstige Variablen
-short SteerManager::speed;
-short SteerManager::turn;
-short SteerManager::lastTurn;
-boolean SteerManager::automaticMode;
-short SteerManager::lastState;
-boolean SteerManager::frontLightOn;
-boolean SteerManager::startShooting;
-boolean SteerManager::stop;
-
 int automaticModeLedSwitch = 0;
 
 void SteerManager::setup() {
     FrontLight::setupFLight();
 }
 
-void SteerManager::loop() {
-    //aktuelle Werte von der Fernbedienung übernehmen
-    lastTurn = turn;
-    turn = RemoteControlRobot::getTurn();
-    speed = RemoteControlRobot::getSpeed();
-    automaticMode = RemoteControlRobot::getAutomaticMode();
-    frontLightOn = RemoteControlRobot::getFrontLightOn();
-    startShooting = RemoteControlRobot::getStartShooting(); //not mounted for now
-    stop = RemoteControlRobot::getStop();
-    //Serial.println("autoMode: " + automaticMode);
-    //Serial.println("frontLight: " + frontLightOn);
-    Serial.println("Joy X: " + turn);
-    //Serial.println()
+void SteerManager::loop() {    
 
-   // if(stop) MotorControl::stop(); //just the Engines for now
-    return;
-    if(frontLightOn) { //manage Light
+    if(RemoteControlRobot::getFrontLightOn()) { //manage Light
             FrontLight::shine(Mode::ON);
     }else{
         if(ldr_R.getValue() < 1200){
@@ -59,8 +34,17 @@ void SteerManager::loop() {
             FrontLight::shine(Mode::ON);
         }
     }
-    
-    if(automaticMode) {             //Fahrmodus überprüfen
+
+    if(RemoteControlRobot::getStop()){
+        MotorControl::stop();
+        return;
+    }  
+
+    short turn = RemoteControlRobot::getTurn();
+    short speed = RemoteControlRobot::getSpeed();
+    boolean startShooting = RemoteControlRobot::getStartShooting(); //not mounted for now
+
+    if(RemoteControlRobot::getAutomaticMode()) {             //Fahrmodus überprüfen
         // if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
         boolean sL = BWLeft.isOnLine();
         boolean sM = BWMiddle.isOnLine();
@@ -74,22 +58,18 @@ void SteerManager::loop() {
         if(sR && sM){ //links auf linie
             MotorControl::driveLeft(speed);
             MotorControl::driveRight((-1)*TURN_MEDIUM);
-            lastState = -1;
         }
         else if(sR && !sM){
             MotorControl::driveLeft(speed);
             //MotorControl::driveRight((-1)*TURN_MEDIUM);
-            lastState = -1;
         }
         else if(sL && sM){//rechts auf linie
             MotorControl::driveRight(speed);
             MotorControl::driveLeft(-1 * TURN_MEDIUM);
-            lastState = 1;
         }
         else if(sL && !sM){
             MotorControl::driveRight(speed);
             //MotorControl::driveLeft(-1 * TURN_MEDIUM);
-            lastState = 1;
         }
         else if( !sL && sM && !sR) { //Mitte
             MotorControl::driveForward(speed);
@@ -101,43 +81,15 @@ void SteerManager::loop() {
         BWMiddle.setLed(0);
 
         MotorControl::stop();
-        /*
-        if(turn > 0 && speed > 0){ //oberes quartiel
-            MotorControl::driveLeft(speed - (speed -turn));
-            MotorControl::driveRight(turn);
+        
+        if(turn <= 0 ){ 
+            MotorControl::driveLeft((100 - turn)/100.0 * speed);
+            MotorControl::driveRight(turn / 100.0 * speed);
         }
-        if(turn < 0 && speed > 0){ //oberes Quartiel rechts
-            MotorControl::driveRight(speed - (speed - (turn * (-1))));
-            MotorControl::driveLeft(speed); 
+        if(turn >= 0 ){ 
+            MotorControl::driveLeft(-turn /100.0 * speed); 
+            MotorControl::driveRight((100 + turn)/100.0 * speed);
         }
-        if(speed < 0 && turn < 0){ //unteres Quartiel links
-            MotorControl::driveRight(speed);
-            MotorControl::driveLeft(turn * (-1));
-        }
-        if(speed < 0 && turn > 0){ //unteres Quartiel rechts
-            MotorControl::driveLeft(speed);
-            MotorControl::driveRight(turn);
-        }
-        if(speed == 0 && turn == 0){
-            MotorControl::stop();
-        }
-        */
-
-
-
-
-        /*
-        if(turn < 0) { //Bot soll nach links fahren
-            turn = turn * (-1);
-            MotorControl::driveRight(MAX_SPEED);
-            MotorControl::driveLeft(MAX_SPEED-turn);
-            BWLeft.setLed(255);         
-        } else { //Bot soll nach rechts fahren
-            MotorControl::driveRight(MAX_SPEED-turn);
-            MotorControl::driveLeft(MAX_SPEED);     
-            BWRight.setLed(255);     
-        } 
-        BWMiddle.setLed((++automaticModeLedSwitch%2 == 0)?0:255); */
     }
 }
 

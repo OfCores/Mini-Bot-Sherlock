@@ -1,32 +1,26 @@
 #include "Button.h"
 
-Button::Button(BUTTON_TYPE button, int cooldownMS):
- bType (button), cooldown (cooldownMS) 
- {}
-
-void Button::setupButton(){
+Button::Button(BUTTON_TYPE button):
+ bType (button), buttonState (false) 
+ {
     pinMode(bType, INPUT_PULLUP);
-    buttonState = false;
-}
+ }
 
-bool Button::isTrigered(){
+bool Button::isTrigered() const{
     return !digitalRead(bType); //invertes signal
 }
 
-bool Button::hasChanged(){
-     cache = millis();
-     if(isTrigered()){ 
-        if(millis() >= (cache + cooldown)){
-            if(buttonState) {
-                buttonState = false;
-                return buttonState;
-            }else{
-               buttonState = true; 
-               return buttonState;
-            }
+void Button::loop(){
+    if(isTrigered()){
+        if(!wasPressed){ 
+            buttonState = !buttonState;
+            wasPressed = true;
         }
     }else{
-        return buttonState;
+      wasPressed = false;
     }
-    Serial.println("Buttonstate:  " + (String) buttonState);
+}
+
+bool Button::getState() const{
+     return buttonState;
 }

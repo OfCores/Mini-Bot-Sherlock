@@ -67,7 +67,7 @@ void RemoteControl::sendData(short speed, short turn, boolean automaticMode, boo
       esp_err_t result = esp_now_send(peer_addr, (uint8_t *) &myData, sizeof(myData));
       
       if (result == ESP_OK) {
-        // Serial.println("Success");
+       // Serial.println("Success");
       } else {
         Serial.print("Send Status: ");
         Serial.println("Failed");
