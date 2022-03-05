@@ -10,14 +10,14 @@
 #define PIN_SR 33
 
 #define PIN_LED_SL 21
-#define PIN_LED_SM 19
+#define PIN_LED_SM 14
 #define PIN_LED_SR 18
 
 #define PIN_LDR_R 35 
 #define PIN_LDR_L 39 //Input only
 
 #define SERVO_TILT 25
-#define SERVO_THRIGGER 0
+#define SERVO_THRIGGER 19
 
 #define FLight 12
 

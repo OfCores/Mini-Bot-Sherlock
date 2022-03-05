@@ -42,7 +42,7 @@ void SteerManager::loop() {
 
     short turn = RemoteControlRobot::getTurn();
     short speed = RemoteControlRobot::getSpeed();
-    boolean startShooting = RemoteControlRobot::getStartShooting(); //not mounted for now
+    boolean startShooting = RemoteControlRobot::getStartShooting(); 
 
     if(RemoteControlRobot::getAutomaticMode()) {             //Fahrmodus überprüfen
         // if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
