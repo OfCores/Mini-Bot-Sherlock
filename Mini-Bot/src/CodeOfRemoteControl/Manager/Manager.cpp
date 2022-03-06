@@ -22,7 +22,7 @@ void Manager::loop() {
     bLight.loop();
     bMode.loop();
     bTrigger.loop();
-    RemoteControl::sendData(JoyStick::getJoyStickSpeed(), JoyStick::getJoyStickTurn(), bMode.getState(),bLight.getState(), bTrigger.getState(), bStop.getState());
+    RemoteControl::sendData(JoyStick::getJoyStickSpeed(), JoyStick::getJoyStickTurn(), bMode.getState(),bLight.getState(), bTrigger.isTrigered(), bStop.getState());
     //Serial.println("Speed:" + (String) JoyStick::getJoyStickSpeed() + "Turn: " + (String) JoyStick::getJoyStickTurn());
     delay(100);
 }

@@ -1,4 +1,5 @@
 #include "RmtCntrlSndr.h"
+#include "../OUTPUT/LED.h"
 
 
 // uint8_t broadcastAddress[] = {0x3C, 0x61, 0x05, 0x3E, 0x1F, 0x90};
@@ -19,10 +20,12 @@ esp_now_peer_info_t slave;
 #define PRINTSCANRESULTS 0
 #define DELETEBEFOREPAIR 0
 
+//LED led (PIN_LED_BLUE);
 
 // callback when data is sent
 void RemoteControl::OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   if(status != ESP_NOW_SEND_SUCCESS) 
+    //led.off();
     Serial.println("ESP-NOW: Delivery failed");
 }
  
@@ -68,13 +71,17 @@ void RemoteControl::sendData(short speed, short turn, boolean automaticMode, boo
       
       if (result == ESP_OK) {
        // Serial.println("Success");
+       //led.on();
       } else {
+
         Serial.print("Send Status: ");
         Serial.println("Failed");
+        //led.off();
       }
       
     } else {
       Serial.println("Slave pair failed!");
+     // led.off();
     }
   }
 }
@@ -89,6 +96,7 @@ void RemoteControl::ScanForSlave() {
   Serial.println("");
   if (scanResults == 0) {
     Serial.println("No WiFi devices in AP Mode found");
+    //led.off();
   } else {
     Serial.print("Found "); Serial.print(scanResults); Serial.println(" devices ");
     for (int i = 0; i < scanResults; ++i) {
@@ -135,6 +143,7 @@ void RemoteControl::ScanForSlave() {
     Serial.println("Slave Found, processing..");
   } else {
     Serial.println("Slave Not Found, trying again.");
+
   }
 
   // clean up ram

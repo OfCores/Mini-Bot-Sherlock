@@ -2,6 +2,7 @@
 #include "../sensors/BWSensor.h"
 
 #include "../Actors/FrontLight.h"
+#include "../Actors/TuretControl.h"
 #include "../Sensors/LDR.h"
 
 //Defines für das Einlenken
@@ -20,6 +21,7 @@ int automaticModeLedSwitch = 0;
 
 void SteerManager::setup() {
     FrontLight::setupFLight();
+    TuretControl::setupTuret();
 }
 
 void SteerManager::loop() {    
@@ -39,10 +41,14 @@ void SteerManager::loop() {
         MotorControl::stop();
         return;
     }  
-
     short turn = RemoteControlRobot::getTurn();
     short speed = RemoteControlRobot::getSpeed();
-    boolean startShooting = RemoteControlRobot::getStartShooting(); 
+
+    /*if(RemoteControlRobot::isShootingMode()){
+        while(RemoteControlRobot::isShootingMode()){
+            TuretControl::tilt(RemoteControlRobot::getSpeed());
+        }
+    }*/
 
     if(RemoteControlRobot::getAutomaticMode()) {             //Fahrmodus überprüfen
         // if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen

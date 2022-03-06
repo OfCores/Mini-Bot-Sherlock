@@ -23,7 +23,7 @@ void TuretControl::setupTuret(){
 }
 
 bool TuretControl::tilt(int input){
-    pos = map(input,0,90,POS_MIN_TILT,POS_MAX_TILT); //test what happens if wrong values
+    pos = map(input,-100,100,POS_MIN_TILT,POS_MAX_TILT); //test what happens if wrong values
     if(pos > POS_MAX_TILT && pos < POS_MIN_TILT){ //ensures that pos is invalid
         attemptCounter = 0;
         while(getCurentTilt() != pos){

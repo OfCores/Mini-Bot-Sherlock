@@ -7,6 +7,7 @@
 #define PIN_BUTTON_UP 0 //not pluged in
 
 #define BUTTON_PIN 25 //not pluged in
+#define PIN_LED_BLUE 26
 
 #define JOY_STICK_PIN_X 33 //up
 #define JOY_STICK_PIN_Y 34  //side

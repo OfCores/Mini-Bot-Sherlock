@@ -88,7 +88,7 @@ boolean RemoteControlRobot::getAutomaticMode() {
 boolean RemoteControlRobot::getFrontLightOn() {
     return myDataRobot.frontLightOn;
 }
-boolean RemoteControlRobot::getStartShooting() {
+boolean RemoteControlRobot::isShootingMode() {
     return myDataRobot.startShooting;
 }
 boolean RemoteControlRobot::getStop() {

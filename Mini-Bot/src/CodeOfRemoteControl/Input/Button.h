@@ -11,10 +11,11 @@ public:
 
     Button(BUTTON_TYPE button);
      bool getState() const;
+     bool isTrigered() const;
      void loop();
 
 private:
-    bool isTrigered() const;
+    
     
     const BUTTON_TYPE bType;
     bool buttonState; 

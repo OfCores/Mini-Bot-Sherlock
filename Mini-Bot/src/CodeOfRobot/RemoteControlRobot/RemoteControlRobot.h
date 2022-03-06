@@ -19,7 +19,7 @@ public:
     static short getTurn();
     static boolean getAutomaticMode();
     static boolean getFrontLightOn();
-    static boolean getStartShooting();
+    static boolean isShootingMode();
     static boolean getStop();
 };
 
