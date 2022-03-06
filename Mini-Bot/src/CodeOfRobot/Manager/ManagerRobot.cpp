@@ -4,7 +4,6 @@
 
 void ManagerRobot::setup() {
   Serial.println("------ Robot -------");
-  //pinMode(PIN_CALIBRATION, INPUT);
   RemoteControlRobot::setup();
   SteerManager::setup();
   MotorControl::setup();
@@ -14,12 +13,8 @@ void ManagerRobot::setup() {
 }
 
 void ManagerRobot::loop() {
-  SteerManager::loop();
-  
-  //if(digitalRead(23) == HIGH) {
-  //  SteerManager::calibrate();
-  //}
 
+  SteerManager::loop();
   vTaskDelay(STEERING_LOOP_LENGTH/portTICK_PERIOD_MS);
 }
 

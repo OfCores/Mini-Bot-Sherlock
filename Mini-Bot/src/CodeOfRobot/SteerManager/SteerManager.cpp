@@ -7,9 +7,9 @@
 
 //Defines für das Einlenken
 #define HARD_TURN_PERCENTAEG 50
-#define TURN_MEDIUM 20
+#define TURN_MEDIUM 50
 #define TURN_RADICAL 0
-#define MAX_SPEED 100
+#define MAX_SPEED 70
 
 BWSensor SteerManager::BWLeft = BWSensor("SLinks", BWSensor::BWSensorType::SL, PIN_LED_SL);
 BWSensor SteerManager::BWMiddle = BWSensor("SMitte", BWSensor::BWSensorType::SM, PIN_LED_SM);
@@ -21,7 +21,7 @@ int automaticModeLedSwitch = 0;
 
 void SteerManager::setup() {
     FrontLight::setupFLight();
-    TuretControl::setupTuret();
+    //TuretControl::setupTuret();
 }
 
 void SteerManager::loop() {    
@@ -44,11 +44,11 @@ void SteerManager::loop() {
     short turn = RemoteControlRobot::getTurn();
     short speed = RemoteControlRobot::getSpeed();
 
-    /*if(RemoteControlRobot::isShootingMode()){
+    if(RemoteControlRobot::isShootingMode()){
         while(RemoteControlRobot::isShootingMode()){
             TuretControl::tilt(RemoteControlRobot::getSpeed());
         }
-    }*/
+    }
 
     if(RemoteControlRobot::getAutomaticMode()) {             //Fahrmodus überprüfen
         // if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
@@ -88,12 +88,12 @@ void SteerManager::loop() {
 
         MotorControl::stop();
         
-        if(turn <= 0 ){ 
+        if(turn > 0 ){ 
             MotorControl::driveLeft((100 - turn)/100.0 * speed);
-            MotorControl::driveRight(turn / 100.0 * speed);
+            MotorControl::driveRight(speed); //turn / 100.0 * speed
         }
-        if(turn >= 0 ){ 
-            MotorControl::driveLeft(-turn /100.0 * speed); 
+        if(turn <= 0 ){ 
+            MotorControl::driveLeft(speed); //-turn /100.0 * speed
             MotorControl::driveRight((100 + turn)/100.0 * speed);
         }
     }
@@ -103,7 +103,7 @@ void SteerManager::loop() {
 bool SteerManager::calibrate(){ //this is not a very innovative function --> a better one is coming soon
     // UI: sign to put Sherlock on line --> TODO: Something that makes sure that Sherlock is corectly placed on line (e.g. a button input)
     MotorControl::stop();
-    vTaskDelay(1000/portTICK_PERIOD_MS);
+    vTaskDelay(3000/portTICK_PERIOD_MS);
     BWMiddle.setLed(255);
 
     BWLeft.calibrateMin();
@@ -112,6 +112,7 @@ bool SteerManager::calibrate(){ //this is not a very innovative function --> a b
 
     BWLeft.setLed(250);
     BWRight.setLed(250);
+
     MotorControl::driveForward(100);
     vTaskDelay(200/portTICK_PERIOD_MS);
     MotorControl::stop();
@@ -120,7 +121,8 @@ bool SteerManager::calibrate(){ //this is not a very innovative function --> a b
     BWLeft.calibrateMax();
     BWRight.calibrateMax();
     BWMiddle.calibrateMax();
-    vTaskDelay(1000/portTICK_PERIOD_MS);
+
+    vTaskDelay(2000/portTICK_PERIOD_MS);
 
     BWLeft.calibrate();
     BWRight.calibrate();
