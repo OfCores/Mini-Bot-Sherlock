@@ -17,7 +17,7 @@ public:
     static void loop();
     static short getSpeed();
     static short getTurn();
-    static boolean getAutomaticMode();
+    static boolean isManualMode();
     static boolean getFrontLightOn();
     static boolean isShootingMode();
     static boolean getStop();

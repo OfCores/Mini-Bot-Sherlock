@@ -8,7 +8,7 @@ uint8_t broadcastAddress[] = {0x3C, 0x61, 0x05, 0x31, 0xBC, 0x64};
 typedef struct RemoteControl::struct_message {
     short speed;
     short turn;
-    boolean automaticMode;
+    boolean manualMode;
     boolean frontLightOn;
     boolean startShooting; 
     boolean stop;
@@ -41,7 +41,7 @@ void RemoteControl::setup() {
   esp_now_register_send_cb(OnDataSent);
   ScanForSlave();
 
-  myData.automaticMode = true;
+  myData.manualMode = true;
   myData.speed = 0;
   myData.turn = 0;
   myData.frontLightOn = false;
@@ -49,7 +49,7 @@ void RemoteControl::setup() {
   myData.stop = false;
 }
  
-void RemoteControl::sendData(short speed, short turn, boolean automaticMode, boolean frontLightOn, boolean startShooting, boolean stop) {
+void RemoteControl::sendData(short speed, short turn, boolean manualMode, boolean frontLightOn, boolean startShooting, boolean stop) {
   if (slave.channel == CHANNEL) { // check if slave channel is defined
     // `slave` is defined
     // Add slave as peer if it has not been added already
@@ -59,7 +59,7 @@ void RemoteControl::sendData(short speed, short turn, boolean automaticMode, boo
 
       myData.speed = speed;
       myData.turn = turn;
-      myData.automaticMode = automaticMode;
+      myData.manualMode = manualMode;
       myData.frontLightOn = frontLightOn;
       myData.startShooting = startShooting;
       myData.stop = stop;
@@ -194,12 +194,8 @@ void deletePeer() {
   }
 }
 
-void RemoteControl::setAutomaticMode(boolean _a) {
-  myData.automaticMode = _a;
-}
-
-boolean RemoteControl::getAutomaticMode() {
-  return myData.automaticMode;
+boolean RemoteControl::isManualMode() {
+  return myData.manualMode;
 }
 boolean RemoteControl::getLight(){
   return myData.frontLightOn;

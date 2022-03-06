@@ -17,8 +17,6 @@ BWSensor SteerManager::BWRight = BWSensor("SRechts", BWSensor::BWSensorType::SR,
 
 LDR ldr_R= LDR(LDR_POS::LDRRight);
 
-int automaticModeLedSwitch = 0;
-
 void SteerManager::setup() {
     FrontLight::setupFLight();
     TuretControl::setupTuret();
@@ -41,9 +39,7 @@ void SteerManager::loop() {
         MotorControl::stop();
         return;
     }  
-    short turn = RemoteControlRobot::getTurn();
-    short speed = RemoteControlRobot::getSpeed();
-
+  
     if(RemoteControlRobot::isShootingMode()){
         while(RemoteControlRobot::isShootingMode()){
             TuretControl::tilt(RemoteControlRobot::getSpeed());
@@ -53,14 +49,13 @@ void SteerManager::loop() {
         }
     }
 
-    if(RemoteControlRobot::getAutomaticMode()) {             //Fahrmodus überprüfen
-        // if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
+    if(!RemoteControlRobot::isManualMode()) {             //Fahrmodus überprüfen
+
+       short speed = 70; // default für automatik
+
         boolean sL = BWLeft.isOnLine();
         boolean sM = BWMiddle.isOnLine();
         boolean sR = BWRight.isOnLine();
-        
-       // Serial.print(sL); Serial.print("|"); Serial.print(sM); Serial.print("|"); Serial.println(sR);
-       // Serial.print(BWLeft.getRawValue()); Serial.print("|"); Serial.print(BWMiddle.getRawValue()); Serial.print("|"); Serial.println(BWRight.getRawValue());
         
         MotorControl::stop();
 
@@ -85,6 +80,9 @@ void SteerManager::loop() {
         }
     } else {
 
+       short speed = RemoteControlRobot::getSpeed();
+       short turn = RemoteControlRobot::getTurn();
+ 
         BWRight.setLed(0); 
         BWLeft.setLed(0);
         BWMiddle.setLed(0);

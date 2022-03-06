@@ -8,7 +8,7 @@
 typedef struct struct_message {
     short speed;
     short turn;
-    boolean automaticMode;
+    boolean manualMode;
     boolean frontLightOn;
     boolean startShooting;
     boolean stop;
@@ -21,19 +21,19 @@ struct_message myDataRobot;
 // Funktion die ausgeführt wird wenn die Fernbedienung Werte schickt
 void RemoteControlRobot::OnDataRecvRobot(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&myDataRobot, incomingData, sizeof(myDataRobot));
-  Serial.print("DATA RECEIVED: Speed -> ");
+  Serial.print("DATA RECEIVED: Speed: ");
   Serial.print(myDataRobot.speed);
-  Serial.print("; Turn -> ");
+  Serial.print("; Turn: ");
   Serial.print(myDataRobot.turn);
-  Serial.print("; Modus -> ");
-  Serial.print(myDataRobot.automaticMode);
-  Serial.println(";");
+  Serial.print("; Modus manuell: ");
+  Serial.print(myDataRobot.manualMode);
+  Serial.print("; Licht: ");
   Serial.print(myDataRobot.frontLightOn);
-  Serial.println(";");
+  Serial.print("; Schuss: ");
   Serial.print(myDataRobot.startShooting);
-  Serial.println(";");
+  Serial.print("; Stop: ");
   Serial.print(myDataRobot.stop);
-  Serial.println(";");
+  Serial.println();
 
 }
  
@@ -55,9 +55,9 @@ void RemoteControlRobot::setup() {
   Serial.println(WiFi.macAddress());
 
   esp_now_register_recv_cb(OnDataRecvRobot);
-  myDataRobot.automaticMode = true;
-  myDataRobot.speed = 80;
-  myDataRobot.turn = 50;
+  myDataRobot.manualMode = false;
+  myDataRobot.speed = 0;
+  myDataRobot.turn = 0;
   myDataRobot.frontLightOn = false;
   myDataRobot.startShooting = false;
   myDataRobot.stop = false;
@@ -82,8 +82,8 @@ short RemoteControlRobot::getSpeed() {
 short RemoteControlRobot::getTurn() {
     return myDataRobot.turn;
 }
-boolean RemoteControlRobot::getAutomaticMode() {
-    return myDataRobot.automaticMode;
+boolean RemoteControlRobot::isManualMode() {
+    return myDataRobot.manualMode;
 }
 boolean RemoteControlRobot::getFrontLightOn() {
     return myDataRobot.frontLightOn;

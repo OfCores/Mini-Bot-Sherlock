@@ -18,8 +18,7 @@ public:
     static void setup();
     static void sendData(short speed, short turn, boolean automaticMode,boolean frontLightOn, boolean startShooting, boolean stop);
     
-    static void setAutomaticMode(boolean _automaticMode);
-    static boolean getAutomaticMode();
+    static boolean isManualMode();
     static boolean getLight();
     static boolean getStop();
 };
