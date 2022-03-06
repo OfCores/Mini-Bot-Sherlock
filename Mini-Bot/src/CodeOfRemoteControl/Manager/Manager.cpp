@@ -1,6 +1,15 @@
 #include "Manager.h"
 
+#include "../Input/Button.h"
+
 #define POTI_PIN 35
+
+Button bStop = Button(Button::BUTTON_TYPE::BL);
+Button bLight = Button(Button::BUTTON_TYPE::BRe);
+Button bMode = Button(Button::BUTTON_TYPE::BD);
+Button bTrigger = Button(Button::BUTTON_TYPE::BT);
+
+
 
 void Manager::setup() {
     Serial.println("------ Remote Control -------");
@@ -9,9 +18,12 @@ void Manager::setup() {
 }   
 
 void Manager::loop() {
-    // RemoteControl::loop();
-    RemoteControl::sendData(JoyStick::getJoyStickSpeed(), JoyStick::getJoyStickTurn(), RemoteControl::getAutomaticMode());
-    JoyStick::manageButton();
+    bStop.loop();
+    bLight.loop();
+    bMode.loop();
+    bTrigger.loop();
+    RemoteControl::sendData(JoyStick::getJoyStickSpeed(), JoyStick::getJoyStickTurn(), bMode.getState(),bLight.getState(), bTrigger.isTrigered(), bStop.getState());
+    //Serial.println("Speed:" + (String) JoyStick::getJoyStickSpeed() + "Turn: " + (String) JoyStick::getJoyStickTurn());
     delay(100);
 }
 

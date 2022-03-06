@@ -11,11 +11,6 @@
 class SteerManager
 {
 private:
-    static short speed;
-    static short turn;
-    static short lastTurn;
-    static boolean automaticMode;
-    static short lastState;
     
     static BWSensor BWLeft;
     static BWSensor BWMiddle;

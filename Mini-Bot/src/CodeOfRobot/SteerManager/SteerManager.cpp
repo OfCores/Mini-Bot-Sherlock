@@ -1,145 +1,101 @@
 #include "SteerManager.h"
 #include "../sensors/BWSensor.h"
 
-#include "../MonitoringAppExperimental/Monitor.h"
 #include "../Actors/FrontLight.h"
-
-BWSensor SteerManager::BWLeft = BWSensor("SLinks", BWSensor::BWSensorType::SL, 21);
-BWSensor SteerManager::BWMiddle = BWSensor("SMitte", BWSensor::BWSensorType::SM, 19);
-BWSensor SteerManager::BWRight = BWSensor("SRechts", BWSensor::BWSensorType::SR, 18);
-
-// set to true to activate Bluetooth
-#define enableBluetooth false
-
-//Variablen für den Status der Sensoren
-boolean sL = true;
-boolean sM = true;
-boolean sR = true;
+#include "../Actors/TuretControl.h"
+#include "../Sensors/LDR.h"
 
 //Defines für das Einlenken
-#define HARD_TURN_PERCENTAEG 30
+#define HARD_TURN_PERCENTAEG 50
 #define TURN_MEDIUM 50
 #define TURN_RADICAL 0
-#define MAX_SPEED 80
+#define MAX_SPEED 70
 
-//sonstige Variablen
-short SteerManager::speed;
-short SteerManager::turn;
-short SteerManager::lastTurn;
-boolean SteerManager::automaticMode;
-short SteerManager::lastState;
+BWSensor SteerManager::BWLeft = BWSensor("SLinks", BWSensor::BWSensorType::SL, PIN_LED_SL);
+BWSensor SteerManager::BWMiddle = BWSensor("SMitte", BWSensor::BWSensorType::SM, PIN_LED_SM);
+BWSensor SteerManager::BWRight = BWSensor("SRechts", BWSensor::BWSensorType::SR, PIN_LED_SR);
 
-int automaticModeLedSwitch = 0;
+LDR ldr_R= LDR(LDR_POS::LDRRight);
 
 void SteerManager::setup() {
-
-    // FrontLight::setupFLight();
-    /* BWLeft.setLed(255);
-    BWMiddle.setLed(255);
-    BWRight.setLed(255);
- */
-    #if enableBluetooth
-        Monitor::setupBluetooth(); //activates Bluetoothcommunication #BLUETOOTH
-        //Serial.println("Bluetooth!!!");
-        //Monitor::sendMessage("SteerManager active:");
-    #endif
-    //calibrate();
-    
+    FrontLight::setupFLight();
+    TuretControl::setupTuret();
 }
 
-void SteerManager::loop() {
-    //aktuelle Werte von der Fernbedienung übernehmen
-    lastTurn = turn;
-    turn = RemoteControlRobot::getTurn();
-    speed = RemoteControlRobot::getSpeed();
-    automaticMode = RemoteControlRobot::getAutomaticMode();
+void SteerManager::loop() {    
 
-    /* MotorControl::driveForward(100);
-    return; */
-    // FrontLight::shine(250, Mode::ON); //Test Lights
+    if(RemoteControlRobot::getFrontLightOn()) { //manage Light
+        FrontLight::shine(Mode::ON);
+    }else{
+        if(ldr_R.getValue() < 1200){
+            FrontLight::shine(Mode::OFF);
+        }else{
+            FrontLight::shine(Mode::ON);
+        }
+    }
 
-    if(automaticMode == true) {             //Fahrmodus überprüfen
-        // if(speed <= 0) return;              //bei negativem Speed wird automatisches Fahren unterbrochen
-    	
-        //Übernehmen der Sensorwerte aus der "SensorRead"-Klasse
-        sL = BWLeft.isOnLine();
-        sM = BWMiddle.isOnLine();
-        sR = BWRight.isOnLine();
+    if(RemoteControlRobot::getStop()){
+        MotorControl::stop();
+        return;
+    }  
+  
+    if(RemoteControlRobot::isShootingMode()){
+        while(RemoteControlRobot::isShootingMode()){
+            TuretControl::tilt(RemoteControlRobot::getSpeed());
+            if(RemoteControlRobot::getTurn() > 95){
+                TuretControl::thrigger(90);
+            }
+        }
+    }
 
-        /* #if enableBluetooth
-        //Serial.println("Bluetooth is in loop!");
-        //if(Monitor::getMessage() == "BWRaw"){  //checks input Mode #BLUETOOTH
-            //Monitor::sendMessage("Raw-  " + String (BWLeft.getRawValue()) + " | " + String(BWMiddle.getRawValue()) + " | " + String(BWRight.getRawValue()));
-            //Serial.println("Send Message...");
-        //}
-        //if(Monitor::getMessage() == "BWBool"){  //checks input Mode #BLUETOOTH
-            Monitor::sendMessage("Bool- " + String (BWLeft.getValue()) + " | " + String(BWMiddle.getValue()) + " | " + String(BWRight.getValue()));
-        //}
-        #endif */
-        Serial.print(sL); Serial.print("|"); Serial.print(sM); Serial.print("|"); Serial.println(sR);
-        Serial.print(BWLeft.getRawValue()); Serial.print("|"); Serial.print(BWMiddle.getRawValue()); Serial.print("|"); Serial.println(BWRight.getRawValue());
+    if(!RemoteControlRobot::isManualMode()) {             //Fahrmodus überprüfen
+
+       short speed = 70; // default für automatik
+
+        boolean sL = BWLeft.isOnLine();
+        boolean sM = BWMiddle.isOnLine();
+        boolean sR = BWRight.isOnLine();
         
         MotorControl::stop();
 
-        if((!sL && sM && !sR) || (sL && sM && sR)) {               //Wenn nur der mittlere Sensor auf der Linie ist -> gerade aus fahren
-            MotorControl::driveForward(MAX_SPEED);
+        if(sR && sM){ //links auf linie
+            MotorControl::driveLeft(speed);
+            MotorControl::driveRight((-1)*TURN_MEDIUM);
         }
-
-        /* if(sL && sM && sR) {                //Wenn die Optokoppler alle auf der Linie sind, dann...
-            if(lastState == 1) {            //Rechts war schwarz
-                MotorControl::driveLeft(MAX_SPEED);
-                MotorControl::driveRight(HARD_TURN_PERCENTAGE);
-            } else if(lastState == -1) {    //Links war schwarz
-                MotorControl::driveLeft(HARD_TURN_PERCENTAGE);
-                MotorControl::driveRight(MAX_SPEED);
-            } else {
-                MotorControl::driveLeft(50);
-                MotorControl::driveRight(5);
-            } 
-        } */
-
-        //Berechnung wie stark der Bot einlenken soll
-        short _turn;
-        if(!sM)
-            _turn = TURN_RADICAL;
-        else
-            _turn = TURN_MEDIUM;
-
-        if(!sL && sR) {         //Der rechte Optokoppler ist auf der Linie -> fährt nach rechts
-            MotorControl::driveLeft(MAX_SPEED);
-            MotorControl::driveRight(_turn);
-            lastState = 1;
+        else if(sR && !sM){
+            MotorControl::driveLeft(speed);
+            //MotorControl::driveRight((-1)*TURN_MEDIUM);
         }
-        if(sL && !sR) {          //Der linke Optokoppler ist auf der Linie -> fährt nach links
-            MotorControl::driveRight(MAX_SPEED);
-            MotorControl::driveLeft(_turn);
-            lastState = -1;
+        else if(sL && sM){//rechts auf linie
+            MotorControl::driveRight(speed);
+            MotorControl::driveLeft(-1 * TURN_MEDIUM);
         }
-
-        /* if(!sL && !sM && !sR) {
-            if(lastState == 1) {         //Der rechte Optokoppler ist auf der Linie -> fährt nach rechts
-                MotorControl::driveLeft(MAX_SPEED);
-                MotorControl::driveRight(_turn);
-            }
-            if(lastState == -1) {          //Der linke Optokoppler ist auf der Linie -> fährt nach links
-                MotorControl::driveRight(MAX_SPEED);
-                MotorControl::driveLeft(_turn);
-            }
-        }*/
+        else if(sL && !sM){
+            MotorControl::driveRight(speed);
+            //MotorControl::driveLeft(-1 * TURN_MEDIUM);
+        }
+        else if( !sL && sM && !sR) { //Mitte
+            MotorControl::driveForward(speed);
+        }
     } else {
+
+       short speed = RemoteControlRobot::getSpeed();
+       short turn = RemoteControlRobot::getTurn();
+ 
         BWRight.setLed(0); 
         BWLeft.setLed(0);
-        if(turn < 0) { //Bot soll nach links fahren
-            turn = turn * (-1);
-            MotorControl::driveRight(MAX_SPEED);
-            MotorControl::driveLeft(MAX_SPEED-turn);
-            BWLeft.setLed(255);         
-        } else { //Bot soll nach rechts fahren
-            MotorControl::driveRight(MAX_SPEED-turn);
-            MotorControl::driveLeft(MAX_SPEED);     
-            BWRight.setLed(255);     
-        } 
-        BWMiddle.setLed((++automaticModeLedSwitch%2 == 0)?0:255); 
+        BWMiddle.setLed(0);
+
+        MotorControl::stop();
+        
+        if(turn >= 0 ){ 
+            MotorControl::driveRight((100 - turn)/100.0 * speed);
+            MotorControl::driveLeft(speed); 
+        }
+        if(turn < 0 ){ 
+            MotorControl::driveRight(speed); 
+            MotorControl::driveLeft((100 + turn)/100.0 * speed);
+        }
     }
 }
 
@@ -154,6 +110,9 @@ bool SteerManager::calibrate(){ //this is not a very innovative function --> a b
     BWRight.calibrateMin();
     BWMiddle.calibrateMin();
 
+    BWLeft.setLed(250);
+    BWRight.setLed(250);
+
     MotorControl::driveForward(100);
     vTaskDelay(200/portTICK_PERIOD_MS);
     MotorControl::stop();
@@ -162,8 +121,16 @@ bool SteerManager::calibrate(){ //this is not a very innovative function --> a b
     BWLeft.calibrateMax();
     BWRight.calibrateMax();
     BWMiddle.calibrateMax();
+
     vTaskDelay(2000/portTICK_PERIOD_MS);
+
+    BWLeft.calibrate();
+    BWRight.calibrate();
+    BWMiddle.calibrate();
+
     BWMiddle.setLed(0);
+    BWLeft.setLed(0);
+    BWRight.setLed(0);
     return true;
    /*  while(BWMiddle.getValue() >= (blackMid - 50) && BWMiddle.getValue() <= (blackMid +50)){ //while sensor !left black line
         MotorControl::driveRight(50);

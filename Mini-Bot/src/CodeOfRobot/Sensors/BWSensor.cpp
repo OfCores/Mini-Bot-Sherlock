@@ -1,16 +1,10 @@
 #include "BWSensor.h"
 
-bool BWSensor::isLineColorBlack = true;
 
-BWSensor::BWSensor(String name, BWSensorType type, Accuracy accuracy) : name(name), type(type), accuracy(accuracy) {
-
-}
-
-BWSensor::BWSensor(String name, BWSensorType type, int pin_led, Accuracy accuracy) : name(name), type(type), pin_led(pin_led), accuracy(accuracy) {
+BWSensor::BWSensor(const String & name, BWSensorType type, int pin_led, Accuracy accuracy) 
+: name(name), type(type), pin_led(pin_led), accuracy(accuracy) {
     pinMode(pin_led, OUTPUT);
 }
-
-
 
 int BWSensor::getValue()const {
     int storage = 0;
@@ -21,9 +15,7 @@ int BWSensor::getValue()const {
 }
 
 int BWSensor::getRawValue() const { 
-    int _value = analogRead(type);
-    // Serial.print(pin_led); Serial.print(": "); Serial.println(_value);
-    return _value; 
+    return analogRead(type);
 }
 
 bool BWSensor::isOnLine() const { 
@@ -35,19 +27,13 @@ bool BWSensor::isOnLine() const {
         _b = _value < midValue;
     }
     
-    if(_b == true) {
-        ((BWSensor*)this)->setLed(255);
-    } else {
-        ((BWSensor*)this)->setLed(0);
-    }
-    
-    // Serial.print(((BWSensor*)this)->pin_led); Serial.print(": "); Serial.println(_value);
+    setLed( _b ? 255 : 0);
+
     return _b;
 }
 
-void BWSensor::setLed(int _dim) {
-    analogWrite(pin_led, _dim);
-    // Serial.print("LED "); Serial.println(_dim);
+void BWSensor::setLed(int dim) const {
+    analogWrite(pin_led, dim);
 }
 
 void BWSensor::calibrateMax() {
@@ -57,15 +43,9 @@ void BWSensor::calibrateMax() {
         vTaskDelay(50/portTICK_RATE_MS);
     }
     average = average / 50.;
-    Serial.print(name); Serial.print(": Max kalibriert auf: "); Serial.println(average);
     maxValue = average;
 
-    Serial.print(name); Serial.print(": Differenz bestimmt auf: "); Serial.println(minValue - maxValue);
-    midValue = (maxValue + minValue) / 2.;
-    Serial.print(name); Serial.print(": Mittelwert bestimmt auf: "); Serial.println(midValue);
-
-    if(minValue > maxValue) {BWSensor::isLineColorBlack = true;} else {BWSensor::isLineColorBlack = false;}
-    Serial.print("IsColorLineBlack? : "); Serial.println(BWSensor::isLineColorBlack);
+    Serial.println(name + ": Max kalibriert auf: " + (String) maxValue); 
 }
 
 void BWSensor::calibrateMin() {
@@ -75,8 +55,17 @@ void BWSensor::calibrateMin() {
         vTaskDelay(50/portTICK_RATE_MS);
     }
     average = average / 50.;
-    Serial.print(name); Serial.print(": Min kalibriert auf: "); Serial.println(average);
     minValue = average;
+
+    Serial.println(name + ": Min kalibriert auf: " + (String) minValue);
 }
 
- 
+void BWSensor::calibrate() {
+    midValue = (maxValue + minValue) / 2.;
+    Serial.println(name + ": Mittelwert bestimmt auf: " + (String) midValue);
+
+    isLineColorBlack = minValue > maxValue;
+    Serial.println(name + ": IsColorLineBlack? : " + (String) isLineColorBlack); 
+}
+
+

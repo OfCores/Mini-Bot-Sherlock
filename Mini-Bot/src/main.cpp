@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define isRemoteControl false
+#define isRemoteControl 0
 #if !isRemoteControl
 
 #include "CodeOfRobot/CodeOfRobot.h"
@@ -21,6 +21,7 @@ void loop() {
 void setup() {
     Serial.begin(115200);
     Serial.println("Started");
+    
     Manager::setup();
 }
 

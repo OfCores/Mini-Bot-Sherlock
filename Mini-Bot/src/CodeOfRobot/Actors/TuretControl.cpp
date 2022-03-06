@@ -18,12 +18,12 @@ int pos;
 void TuretControl::setupTuret(){
     STilt.attach(SERVO_TILT);
     STilt.write(POS_MIN_TILT); //reset Servo to standart position
-    //SThrigger.attach(SERVO_THRIGGER);
-    //SThrigger.write(POS_MIN_THRIGGER);
+    SThrigger.attach(SERVO_THRIGGER);
+    SThrigger.write(POS_MIN_THRIGGER);
 }
 
 bool TuretControl::tilt(int input){
-    pos = map(input,0,90,POS_MIN_TILT,POS_MAX_TILT); //test what happens if wrong values
+    pos = map(input,-100,100,POS_MIN_TILT,POS_MAX_TILT); //test what happens if wrong values
     if(pos > POS_MAX_TILT && pos < POS_MIN_TILT){ //ensures that pos is invalid
         attemptCounter = 0;
         while(getCurentTilt() != pos){
