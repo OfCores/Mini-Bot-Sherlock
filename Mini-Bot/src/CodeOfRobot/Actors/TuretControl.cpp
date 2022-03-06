@@ -18,8 +18,8 @@ int pos;
 void TuretControl::setupTuret(){
     STilt.attach(SERVO_TILT);
     STilt.write(POS_MIN_TILT); //reset Servo to standart position
-    //SThrigger.attach(SERVO_THRIGGER);
-    //SThrigger.write(POS_MIN_THRIGGER);
+    SThrigger.attach(SERVO_THRIGGER);
+    SThrigger.write(POS_MIN_THRIGGER);
 }
 
 bool TuretControl::tilt(int input){

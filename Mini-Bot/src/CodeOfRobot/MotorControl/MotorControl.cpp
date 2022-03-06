@@ -39,7 +39,7 @@ void MotorControl::driveLeft(double speed) {
 }
 
 void MotorControl::driveRight(double speed) {
-    totalSpeed = RemoteControlRobot::getSpeed();;
+    totalSpeed = RemoteControlRobot::getSpeed();
     speed = speed * (totalSpeed / 100.);
     speed = round(speed * 2.5);
     //Serial.println("Drive Right "); Serial.print(speed);

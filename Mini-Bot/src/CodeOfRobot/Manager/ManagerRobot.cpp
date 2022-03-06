@@ -8,7 +8,7 @@ void ManagerRobot::setup() {
   SteerManager::setup();
   MotorControl::setup();
 
-  //SteerManager::calibrate();
+  SteerManager::calibrate();
   // xTaskCreate(loop2, "Loop2", 2048, NULL, 0, NULL);
 }
 

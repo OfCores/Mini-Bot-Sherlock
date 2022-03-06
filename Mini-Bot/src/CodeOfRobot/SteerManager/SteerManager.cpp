@@ -21,7 +21,7 @@ int automaticModeLedSwitch = 0;
 
 void SteerManager::setup() {
     FrontLight::setupFLight();
-    //TuretControl::setupTuret();
+    TuretControl::setupTuret();
 }
 
 void SteerManager::loop() {    
@@ -47,6 +47,9 @@ void SteerManager::loop() {
     if(RemoteControlRobot::isShootingMode()){
         while(RemoteControlRobot::isShootingMode()){
             TuretControl::tilt(RemoteControlRobot::getSpeed());
+            if(RemoteControlRobot::getTurn() > 95){
+                TuretControl::thrigger(90);
+            }
         }
     }
 
@@ -88,13 +91,13 @@ void SteerManager::loop() {
 
         MotorControl::stop();
         
-        if(turn > 0 ){ 
-            MotorControl::driveLeft((100 - turn)/100.0 * speed);
-            MotorControl::driveRight(speed); //turn / 100.0 * speed
+        if(turn >= 0 ){ 
+            MotorControl::driveRight((100 - turn)/100.0 * speed);
+            MotorControl::driveLeft(speed); 
         }
-        if(turn <= 0 ){ 
-            MotorControl::driveLeft(speed); //-turn /100.0 * speed
-            MotorControl::driveRight((100 + turn)/100.0 * speed);
+        if(turn < 0 ){ 
+            MotorControl::driveRight(speed); 
+            MotorControl::driveLeft((100 + turn)/100.0 * speed);
         }
     }
 }
