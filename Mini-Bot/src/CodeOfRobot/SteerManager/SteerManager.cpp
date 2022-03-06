@@ -25,12 +25,11 @@ void SteerManager::setup() {
 void SteerManager::loop() {    
 
     if(RemoteControlRobot::getFrontLightOn()) { //manage Light
-            FrontLight::shine(Mode::ON);
+        FrontLight::shine(Mode::ON);
     }else{
         if(ldr_R.getValue() < 1200){
             FrontLight::shine(Mode::OFF);
         }else{
-            Serial.println(ldr_R.getRawValue());
             FrontLight::shine(Mode::ON);
         }
     }
