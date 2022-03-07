@@ -1,7 +1,7 @@
 #include "JoyStick.h"
 #include "../Input/Button.h"
 
-#define JOY_STICK_NAV_TOLERANCE 30
+#define JOY_STICK_NAV_TOLERANCE 40
 #define MOTOR_LOWEST_PERCENTAGE 30
 
 int joyStickInitialX, joyStickInitialY;

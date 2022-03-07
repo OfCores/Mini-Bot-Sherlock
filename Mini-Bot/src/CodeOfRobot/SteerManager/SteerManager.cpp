@@ -44,7 +44,6 @@ void SteerManager::loop() {
         return;
     }  
   
-    if(RemoteControlRobot::isShootingMode()){
         while(RemoteControlRobot::isShootingMode()){
             TuretControl::tilt(RemoteControlRobot::getSpeed());
             if(RemoteControlRobot::getTurn() > 95){
@@ -55,13 +54,17 @@ void SteerManager::loop() {
 
     if(!RemoteControlRobot::isManualMode()) {             //Fahrmodus überprüfen
 
-       short speed = 70; // default für automatik
+       short speed = 50; // default für automatik
+
+        BWLeft.setLed(0);
+        BWMiddle.setLed(0);
+        BWRight.setLed(0);
 
         boolean sL = BWLeft.isOnLine();
         boolean sM = BWMiddle.isOnLine();
         boolean sR = BWRight.isOnLine();
         
-        /* Serial.print(sL); Serial.print("|"); Serial.print(sM); Serial.print("|"); Serial.println(sR);
+       /*  Serial.print(sL); Serial.print("|"); Serial.print(sM); Serial.print("|"); Serial.println(sR);
         Serial.print(BWLeft.getRawValue()); Serial.print("|"); Serial.print(BWMiddle.getRawValue()); Serial.print("|"); Serial.println(BWRight.getRawValue());
  */
         MotorControl::stop();
@@ -86,10 +89,16 @@ void SteerManager::loop() {
             MotorControl::driveForward(speed);
         } */
         MotorControl::stop();
-        if(sL && sM && !sR) {
-            MotorControl::driveLeft(0);
+        if(sL) {
             MotorControl::driveRight(speed);
+        }  
+        if(sR) {
+            MotorControl::driveLeft(speed);
         }
+        if(!sL && sM && !sR) {
+            MotorControl::driveForward(speed);
+        }
+
     } else {
 
        short speed = RemoteControlRobot::getSpeed();
