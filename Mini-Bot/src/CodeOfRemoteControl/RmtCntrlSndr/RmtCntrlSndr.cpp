@@ -1,4 +1,5 @@
 #include "RmtCntrlSndr.h"
+#include "../OUTPUT/LED.h"
 
 
 // uint8_t broadcastAddress[] = {0x3C, 0x61, 0x05, 0x3E, 0x1F, 0x90};
@@ -7,7 +8,10 @@ uint8_t broadcastAddress[] = {0x3C, 0x61, 0x05, 0x31, 0xBC, 0x64};
 typedef struct RemoteControl::struct_message {
     short speed;
     short turn;
-    boolean automaticMode;
+    boolean manualMode;
+    boolean frontLightOn;
+    boolean startShooting; 
+    boolean stop;
 } struct_message;
 
 struct_message myData;
@@ -16,10 +20,12 @@ esp_now_peer_info_t slave;
 #define PRINTSCANRESULTS 0
 #define DELETEBEFOREPAIR 0
 
+LED led (PIN_LED_BLUE);
 
 // callback when data is sent
 void RemoteControl::OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   if(status != ESP_NOW_SEND_SUCCESS) 
+    led.off();
     Serial.println("ESP-NOW: Delivery failed");
 }
  
@@ -35,15 +41,15 @@ void RemoteControl::setup() {
   esp_now_register_send_cb(OnDataSent);
   ScanForSlave();
 
-  myData.automaticMode = true;
+  myData.manualMode = true;
   myData.speed = 0;
   myData.turn = 0;
+  myData.frontLightOn = false;
+  myData.startShooting = false;
+  myData.stop = false;
 }
  
-void RemoteControl::loop() {
-}
-
-void RemoteControl::sendData(short speed, short turn, boolean automaticMode) {
+void RemoteControl::sendData(short speed, short turn, boolean manualMode, boolean frontLightOn, boolean startShooting, boolean stop) {
   if (slave.channel == CHANNEL) { // check if slave channel is defined
     // `slave` is defined
     // Add slave as peer if it has not been added already
@@ -53,21 +59,29 @@ void RemoteControl::sendData(short speed, short turn, boolean automaticMode) {
 
       myData.speed = speed;
       myData.turn = turn;
-      myData.automaticMode = automaticMode;
-      Serial.println();
-      Serial.print("Speed: "); Serial.print(speed); Serial.print("turn: "); Serial.println(turn);
+      myData.manualMode = manualMode;
+      myData.frontLightOn = frontLightOn;
+      myData.startShooting = startShooting;
+      myData.stop = stop;
+
+      //Serial.println();
+      //Serial.print("Speed: "); Serial.print(speed); Serial.print("turn: "); Serial.println(turn);
 
       esp_err_t result = esp_now_send(peer_addr, (uint8_t *) &myData, sizeof(myData));
       
       if (result == ESP_OK) {
-        // Serial.println("Success");
+       // Serial.println("Success");
+       led.on();
       } else {
+
         Serial.print("Send Status: ");
         Serial.println("Failed");
+        led.off();
       }
       
     } else {
       Serial.println("Slave pair failed!");
+      led.off();
     }
   }
 }
@@ -82,6 +96,7 @@ void RemoteControl::ScanForSlave() {
   Serial.println("");
   if (scanResults == 0) {
     Serial.println("No WiFi devices in AP Mode found");
+    led.off();
   } else {
     Serial.print("Found "); Serial.print(scanResults); Serial.println(" devices ");
     for (int i = 0; i < scanResults; ++i) {
@@ -128,6 +143,7 @@ void RemoteControl::ScanForSlave() {
     Serial.println("Slave Found, processing..");
   } else {
     Serial.println("Slave Not Found, trying again.");
+
   }
 
   // clean up ram
@@ -143,9 +159,9 @@ bool RemoteControl::manageSlave() {
     // Serial.print("Slave Status: ");
     // check if the peer exists
     bool exists = esp_now_is_peer_exist(slave.peer_addr);
-    if ( exists) {
+    if (exists) {
       // Slave already paired.
-      // Serial.println("Already Paired");
+       //Serial.println("Already Paired");
       return true;
     } else {
       // Slave not paired, attempt pair
@@ -178,10 +194,12 @@ void deletePeer() {
   }
 }
 
-void RemoteControl::setAutomaticMode(boolean _a) {
-  myData.automaticMode = _a;
+boolean RemoteControl::isManualMode() {
+  return myData.manualMode;
 }
-
-boolean RemoteControl::getAutomaticMode() {
-  return myData.automaticMode;
+boolean RemoteControl::getLight(){
+  return myData.frontLightOn;
+}
+boolean RemoteControl::getStop(){
+  return myData.stop;
 }

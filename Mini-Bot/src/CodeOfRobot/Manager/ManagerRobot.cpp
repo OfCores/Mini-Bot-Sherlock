@@ -1,23 +1,20 @@
 #include "ManagerRobot.h"
 
-#define STEERING_LOOP_LENGTH 0
+#define STEERING_LOOP_LENGTH 50
 
 void ManagerRobot::setup() {
   Serial.println("------ Robot -------");
-  pinMode(23, INPUT);
   RemoteControlRobot::setup();
   SteerManager::setup();
   MotorControl::setup();
 
-  // SteerManager::calibrate();
+  SteerManager::calibrate();
   // xTaskCreate(loop2, "Loop2", 2048, NULL, 0, NULL);
 }
 
 void ManagerRobot::loop() {
+
   SteerManager::loop();
-  if(digitalRead(23) == HIGH) {
-    SteerManager::calibrate();
-  }
   vTaskDelay(STEERING_LOOP_LENGTH/portTICK_PERIOD_MS);
  
 }

@@ -4,6 +4,7 @@
 #include "../Util/Util.h"
 #include "../RmtCntrlSndr/RmtCntrlSndr.h"
 #include "../JoyStick/JoyStick.h"
+#include <Arduino.h>
 
 class Manager
 {
@@ -12,7 +13,6 @@ private:
     static int getJoyStickTurn();
     static int getJoyStickSpeed();
 public:
-    static boolean automaticMode;
     static void setup();
     static void loop();
     static int getSpeed();

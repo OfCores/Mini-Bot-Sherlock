@@ -2,7 +2,6 @@
 
 #define lowestExecutableVoltage 50
 
-int totalSpeed = 100;
 
 void MotorControl::setup() {
     pinMode(PIN_LEFT_MOTOR_F, OUTPUT);
@@ -10,18 +9,9 @@ void MotorControl::setup() {
     pinMode(PIN_RIGHT_MOTOR_F, OUTPUT);
     pinMode(PIN_RIGHT_MOTOR_B, OUTPUT);
 
-    pinMode(PIN_RIGHT_GENERAL, OUTPUT);
+    //speed control Pins
+    pinMode(PIN_RIGHT_GENERAL, OUTPUT); 
     pinMode(PIN_LEFT_GENERAL, OUTPUT);
-
-
-  /*   digitalWrite(PIN_LEFT_MOTOR_B, HIGH);
-    digitalWrite(PIN_LEFT_MOTOR_F, LOW);
-    analogWrite(PIN_LEFT_GENERAL, 255);
-
-    digitalWrite(PIN_RIGHT_MOTOR_F, LOW);
-    digitalWrite(PIN_RIGHT_MOTOR_B, HIGH);
-    analogWrite(PIN_RIGHT_GENERAL, 255); */
-
 }
 
 void MotorControl::loop() {
@@ -29,10 +19,8 @@ void MotorControl::loop() {
 }
 
 void MotorControl::driveLeft(double speed) {
-    totalSpeed = RemoteControlRobot::getSpeed(); //Verechnung mit der Geschwindigkeit
-    speed = speed * (totalSpeed / 100.);
     speed = round(speed * 2.5);                 //Skalieren von Prozent auf 255 mV
-    // Serial.println("Drive Left"); Serial.println(speed);
+    //Serial.println("Drive Left"); Serial.println(speed);
     if(speed < 0) {
         speed = speed * (-1);
         // constrain(speed, lowestExecutableVoltage, 255);
@@ -48,10 +36,8 @@ void MotorControl::driveLeft(double speed) {
 }
 
 void MotorControl::driveRight(double speed) {
-    totalSpeed = RemoteControlRobot::getSpeed();;
-    speed = speed * (totalSpeed / 100.);
     speed = round(speed * 2.5);
-    // Serial.println("Drive Right"); Serial.println(speed);
+    //Serial.println("Drive Right "); Serial.print(speed);
     if(speed < 0) {
         speed = speed * (-1);
         // constrain(speed, lowestExecutableVoltage, 255);
@@ -67,11 +53,7 @@ void MotorControl::driveRight(double speed) {
 }
 
 void MotorControl::driveForward(double speed) {
-    totalSpeed = RemoteControlRobot::getSpeed();; //Verechnung mit der Geschwindigkeit
-    speed = speed * (totalSpeed / 100.);
     speed = round(speed * 2.5);
-    /* Serial.print("for speed ");
-    Serial.println(speed); */
     if(speed < 0) {
         speed = speed * (-1);
         // constrain(speed, lowestExecutableVoltage, 255);
